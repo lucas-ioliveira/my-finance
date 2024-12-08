@@ -22,6 +22,15 @@
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-gears"></i></div>
                     Configurações
                 </a>
+                <hr>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button class="nav-link" type="submit" style="border: none; background-color: transparent">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+                        Logout
+                    </button>
+                </form>
+                
                 
             </div>
         </div>
