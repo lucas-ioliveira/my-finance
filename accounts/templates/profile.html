@@ -1,0 +1,54 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block title %}Perfil{% endblock title %}
+
+{% block content %}
+
+{% include "partials/topnav/_topnav.html" %}
+<div id="layoutSidenav">
+    {% include "partials/sidenav/_sidenav.html" %}
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">Perfil</h1>
+                {% include "partials/messages/messages.html" %}
+                <div class="row mb-2 mt-3">
+                    <div class="col-md-6">
+                        <div class="card shadow-sm">
+                            <div class="card-header">Informações pessoais</div>
+                            <div class="card-body">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    
+                                    <!-- Campos do formulário -->
+                                    {% for field in form %}
+                                    <div class="mb-3">
+                                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                        {{ field }}
+                                        {% if field.help_text %}
+                                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                                        {% endif %}
+                                        {% for error in field.errors %}
+                                        <div class="text-danger small">{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endfor %}
+
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-primary">Salvar</button>
+                                    </div>                                    
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        {% include "partials/footer/_footer.html" %}
+    </div>
+</div>
+
+{% endblock %}
