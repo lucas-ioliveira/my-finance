@@ -1,6 +1,6 @@
 from django.urls import path, reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView
 
 from accounts.views import RegisterUserView, CustomLogoutView
 from accounts import views  as v

@@ -11,7 +11,7 @@ from django.http import JsonResponse
 
 from accounts.forms import CustomUserCreationForm
 from accounts.models import ContactDetails
-from accounts.utils import get_cep_info, atualizar_info_contato, atualizar_info_pessoais
+from accounts.utils import Accounts
 
 
 class RegisterUserView(CreateView):
@@ -45,7 +45,7 @@ def buscar_endereco(request):
         # import ipdb; ipdb.set_trace()
         cep = request.GET.get("cep")
         try:
-            cep_info = get_cep_info(cep)
+            cep_info = Accounts.get_cep_info(cep)
             return JsonResponse({'cep_info': cep_info}, status=200)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
@@ -81,6 +81,6 @@ def user_profile(request):
             return redirect(previous_page)
 
         elif request.POST.get('info') == 'info_contato':
-            atualizar_info_contato(user, request.POST)
+            Accounts.atualizar_info_contato(user, request.POST)
             messages.success(request, "Seu endereço foi atualizado com sucesso!")
             return redirect(previous_page)
