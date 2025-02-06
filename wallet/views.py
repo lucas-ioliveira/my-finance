@@ -1,10 +1,9 @@
 from django.views import View
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.http import JsonResponse
+
 
 from wallet.models import Category, Expense, Revenue
 
