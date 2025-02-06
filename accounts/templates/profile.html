@@ -13,12 +13,11 @@
         <main>
             <div class="container-fluid px-4">
                 <h1 class="mt-4 ">Perfil</h1>
-
-                {% include "partials/messages/messages.html" %}
+                <hr class="mt-0 mb-4">
 
                 <div class="row mb-2 mt-3 justify-content-center">
 
-                    <div class="col-md-9">
+                    <div class="col-md-9 mt-5">
                         <div class="card shadow-sm">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 Informações pessoais
@@ -231,6 +230,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+
+{% include "partials/messages/messages.html" %}
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

@@ -15,13 +15,24 @@
             <div class="container-fluid px-4">
             
                 <h1 class="mt-4 ">Receitas</h1>
+                <hr class="mt-0 mb-4">
 
 
                 {% comment %} {% include "partials/messages/messages.html" %} {% endcomment %}
 
                 <div class="row mb-2 mt-3 justify-content-center">
 
-                    <div class="col-md-9">
+                    
+                    <div class="col-md-9 mt-5">
+
+                        <form class="d-flex" role="search" method="GET" action="{% url 'revenue' %}">
+                            <div class="input-group mb-3">
+                                <input class="form-control" type="search" placeholder="Pesquisar"  name="search" aria-label="Search">
+                                <button class="btn btn-outline-primary" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                            </div>
+                        </form>
+
+
                         <div class="card shadow-sm">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <div>
@@ -37,12 +48,7 @@
                                 <div class="table-responsive">
                                     <table class="table table-striped mt-3">
 
-                                        <form class="d-flex" role="search" method="GET" action="{% url 'revenue' %}">
-                                            <div class="input-group mb-3">
-                                            <input class="form-control" type="search" placeholder="Pesquisar"  name="search" aria-label="Search">
-                                            <button class="btn btn-outline-primary" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                                            </div>
-                                        </form>
+                                        
 
                                         <thead>
                                             <tr>
