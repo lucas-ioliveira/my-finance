@@ -8,10 +8,17 @@
                     Dashboard
                 </a>
 
-                <a class="nav-link" href="index.html">
-                    <div class="sb-nav-link-icon"><i class="fas fa-wallet"></i></div>
-                    Minha carteira
-                </a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="index.html" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="sb-nav-link-icon"><i class="fas fa-wallet"></i></div>
+                        Minha carteira
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#!">Despesas</a></li>
+                        <li><a class="dropdown-item" href="#!">Investimentos</a></li>
+                        <li><a class="dropdown-item" href="">Receitas</a></li>
+                    </ul>
+                </li>
 
                 <a class="nav-link" href="{% url "profile" %}">
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-user"></i></div>
