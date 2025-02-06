@@ -1,0 +1,298 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block title %}MyFinance | Receitas{% endblock title %}
+
+{% block content %}
+
+{% include "partials/topnav/_topnav.html" %}
+<div id="layoutSidenav">
+    {% include "partials/sidenav/_sidenav.html" %}
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+            
+                <h1 class="mt-4 ">Receitas</h1>
+
+
+                {% include "partials/messages/messages.html" %}
+
+                <div class="row mb-2 mt-3 justify-content-center">
+
+                    <div class="col-md-9">
+                        <div class="card shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <div>
+                                <i class="fas fa-table me-1"></i>
+                                Lista de entradas
+                                </div>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalInfoPessoais">
+                                    <i class="fa-solid fa-plus"></i>
+                                    Adicionar
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped mt-3">
+                                        <thead>
+                                            <tr>
+                                                <th>Descrição</th>
+                                                <th>Valor</th>
+                                                <th>Categoria</th>
+                                                <th>Data de Pagamento</th>
+                                                <th>Forma de Pagamento</th>
+                                                <th>Comprovante</th>
+                                                <th>Ações</th>
+                                            </tr>
+                                        </thead>
+                                        
+                                        <tbody>
+                                            {% for tarefa in tarefas %}
+                                            <tr>
+                    
+                                                <td class="text-truncate" style="max-width: 200px;">
+                                                    {{ tarefa.titulo }}
+                                                </td>
+                    
+                                                {% if tarefa.status == 'À fazer' %}
+                                                    <td class="badge badge-primary">
+                                                        {{ tarefa.status }}
+                                                    </td>
+                                                {% elif tarefa.status == 'Andamento' %}
+                                                    <td class="badge badge-info">
+                                                        {{ tarefa.status }}
+                                                    </td>
+                                                {% elif tarefa.status == 'Pausado' %}
+                                                    <td class="badge badge-warning" style="color: white;">
+                                                        {{ tarefa.status }}
+                                                    </td>
+                                                {% elif tarefa.status == 'Concluido' %}
+                                                    <td class="badge badge-success">
+                                                        {{ tarefa.status }}
+                                                    </td>
+                                                {% endif %}
+                    
+                                                <td style="text-align: center;">
+                                                    {{ tarefa.data_criacao }}
+                                                </td>
+                    
+                                                <td style="text-align: center;">
+                                                    <div class="d-flex gap-2 justify-content-center align-items-center flex-wrap">
+                                                        {% include "partials/button/_button_detalhes.html" %}
+                                                        {% include "partials/button/_button_concluir_tarefa.html" %}
+                                                        {% include "partials/button/_button_editar_tarefa.html" %}
+                                                        {% include "partials/button/_button_clonar_tarefa.html" %}
+                                                        {% include "partials/button/_button_deletar_tarefa.html" %}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="modalInfoPessoais" tabindex="-1" role="dialog" aria-labelledby="labelInfoPessoais" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="h5InfoPessoais">Editar Informações Pessoais</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="{% url 'profile' %}">
+                                {% csrf_token %}
+                                
+                                <div class="mb-2">
+                                    <label for="medico" class="form-label">Nome</label>
+                                    <input type="text" placeholder="Digite o nome" class="form-control" name="nome" required>
+                                </div>
+
+                                <div class="mb-2">
+                                    <label for="medico" class="form-label">Sobrenome</label>
+                                    <input type="text" placeholder="Digite o sobrenome" class="form-control" name="sobrenome" required>
+                                </div>
+
+                                <div class="mb-2">
+                                    <label for="medico" class="form-label">E-mail</label>
+                                    <input type="email" placeholder="Digite o e-mail" class="form-control" name="email" required>
+                                </div>
+
+                                <input type="hidden" name="info" value="info_pessoais">
+                              
+                              
+                                <div class="modal-footer" style="margin-top:60px;">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                    <button type="submit" class="btn btn-primary" id="salvarTarefa" onclick="sendEditarContato(event)">Salvar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="modalInfoContato" tabindex="-1" role="dialog" aria-labelledby="labelInfoContato" aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="h5InfoContato">Editar Informações de Contato</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="{% url 'profile' %}">
+                                {% csrf_token %}
+                                
+                                <div class="row mb-2">
+                                    
+                                    <div class="col-md-6">
+                                        <label for="cep" class="form-label">CEP</label>
+                                        <div class="d-flex">
+                                            <input type="text" placeholder="00000-000" class="form-control mr-3" name="cep" id="cep" required>
+                                            <button type="button" class="btn btn-primary" onclick="buscarEndereco()">Buscar</button>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="logradouro" class="form-label">Logradouro</label>
+                                        <input type="text" placeholder="Digite o logradouro" class="form-control" name="logradouro" id="logradouro" required>
+                                    </div>
+                                </div>
+            
+                                <div class="row mb-2">
+                                    
+                                    <div class="col-md-6">
+                                        <label for="numero" class="form-label">Número</label>
+                                        <input type="text" placeholder="Digite o número" class="form-control" name="numero" id="numero" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="bairro" class="form-label">Bairro</label>
+                                        <input type="text" placeholder="Digite o bairro" class="form-control" name="bairro" id="bairro" required>
+                                    </div>
+                                </div>
+            
+                                <div class="row mb-2">
+                                    
+                                    <div class="col-md-6">
+                                        <label for="cidade" class="form-label">Cidade</label>
+                                        <input type="text" placeholder="Digite a cidade" class="form-control" name="cidade" id="cidade" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="uf" class="form-label">UF</label>
+                                        <input type="text" placeholder="Digite o UF" class="form-control" name="uf" id="uf" required>
+                                    </div>
+                                </div>
+            
+                                <div class="row mb-2">
+                                    
+                                    <div class="col-md-6">
+                                        <label for="complemento" class="form-label">Complemento</label>
+                                        <input type="text" placeholder="Digite o complemento" class="form-control" name="complemento" id="complemento">
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="telefone" class="form-label">Telefone</label>
+                                        <input type="text" placeholder="Digite o telefone" class="form-control" name="telefone" required>
+                                    </div>
+                                </div>
+            
+                                <input type="hidden" name="info" value="info_contato">
+            
+                                <div class="modal-footer" style="margin-top:60px;">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                    <button type="submit" class="btn btn-primary">Salvar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+
+        {% include "partials/footer/_footer.html" %}
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const cepInput = document.getElementById('cep');
+
+        function formatarCEP(inputElement) {
+            let cep = inputElement.value.replace(/\D/g, ''); // Remove tudo que não for número
+    
+            if (cep.length > 8) {
+            cep = cep.slice(0, 8); // Limita a 8 caracteres
+            }
+    
+            if (cep.length > 5) {
+            cep = `${cep.slice(0, 5)}-${cep.slice(5)}`; // Formato XXXXX-XXX
+            }
+    
+            inputElement.value = cep; 
+        }
+    
+        cepInput.addEventListener('input', function() {
+            formatarCEP(cepInput);
+        });
+
+        cepInput.addEventListener('past', function() {
+            formatarCEP(cepInput);
+        });
+    });
+
+    function buscarEndereco() {
+        const cepInput = document.getElementById('cep');
+        const cep = cepInput.value.replace(/\D/g, '');
+    
+        if (!cep || cep.length !== 8) {
+            alert('Por favor, insira um CEP válido.');
+            return;
+        }
+
+        fetch(`/accounts/profile/buscar-endereco/?cep=${cep}`)
+            .then(response => {
+                console.log('Status:', response.status); // Verifica o código de status
+                if (!response.ok) {
+                    throw new Error(`Erro ao buscar dados do CEP. Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Dados recebidos:', data); // Verifique o retorno
+                if (data.cep_info) {
+                    document.getElementById('logradouro').value = data.cep_info.logradouro || '';
+                    document.getElementById('bairro').value = data.cep_info.bairro || '';
+                    document.getElementById('cidade').value = data.cep_info.cidade || '';
+                    document.getElementById('uf').value = data.cep_info.estado || '';
+    
+                    const numeroEnderecoField = document.getElementById('numero');
+                    numeroEnderecoField.placeholder = 'Por favor, digite o número';
+    
+                } else {
+                    alert('CEP inválido ou não encontrado.');
+                    window.location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao buscar CEP:', error.message); // Mostra o erro detalhado
+                alert('Erro ao buscar CEP. Verifique e tente novamente.');
+                window.location.reload();
+            });
+    }
+</script>
+
+{% endblock %}
