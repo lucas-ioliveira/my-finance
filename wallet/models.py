@@ -16,6 +16,12 @@ class Category(Base):
 
 
 class Revenue(Base):
+    STATUS_CHOICES = [
+        ('Pendente', 'Pendente'),
+        ('Pago', 'Pago'),
+        ('Cancelado', 'Cancelado'),
+    ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuário')
     description = models.CharField(max_length=255, verbose_name='Descrição')  
     notes = models.TextField(blank=True, null=True, verbose_name='Observações')
@@ -24,6 +30,7 @@ class Revenue(Base):
     payment_date = models.DateField(verbose_name='Data de Pagamento')
     payment_method = models.CharField(max_length=255, verbose_name='Forma de Pagamento')
     receipt = models.FileField(upload_to='receipts/revenue/', blank=True, null=True, verbose_name='Comprovante')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pendente', verbose_name='Status')
 
     class Meta:
         ordering = ['-created_at']
@@ -33,6 +40,12 @@ class Revenue(Base):
 
 
 class Expense(Base):
+    STATUS_CHOICES = [
+        ('Pendente', 'Pendente'),
+        ('Pago', 'Pago'),
+        ('Cancelado', 'Cancelado'),
+    ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuário')
     description = models.CharField(max_length=255, verbose_name='Descrição')
     notes = models.TextField(blank=True, null=True, verbose_name='Observações')
@@ -43,6 +56,7 @@ class Expense(Base):
     is_paid = models.BooleanField(default=False, verbose_name='Pago')
     payment_method = models.CharField(max_length=255, verbose_name='Forma de Pagamento')
     receipt = models.FileField(upload_to='receipts/expense/', blank=True, null=True, verbose_name='Comprovante')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pendente', verbose_name='Status')
 
     class Meta:
         ordering = ['-created_at']
