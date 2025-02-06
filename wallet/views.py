@@ -12,6 +12,9 @@ from wallet.models import Category, Expense, Revenue
 class CategoryView(View):
     def get(self, request):
         categories = Category.objects.all().filter(user=request.user, active=True)
+        if request.GET.get('search'):
+            search = request.GET.get('search')
+            categories = Category.objects.filter(user=request.user, active=True).filter(name__icontains=search)
         return render(request, 'category.html', {'categories': categories})
     
     def post(self, request):
@@ -53,6 +56,10 @@ class RevenueView(View):
         categorias = Category.objects.all().filter(user=request.user, active=True)
         status = Revenue.STATUS_CHOICES
         revenue = Revenue.objects.all().filter(user=request.user, active=True)
+        if request.GET.get('search'):
+            search = request.GET.get('search')
+            revenue = Revenue.objects.filter(user=request.user, active=True).filter(description__icontains=search)
+        
         context = {
             'revenue': revenue,
             'status': status,
@@ -69,6 +76,7 @@ class RevenueView(View):
         payment_date = request.POST.get('data_pagamento')
         payment_method = request.POST.get('forma_pagamento')
         receipt = request.FILES.get('file')
+        import ipdb; ipdb.set_trace()
 
         revenue = Revenue(user=user, description=description, notes=notes, amount=amount, category_id=category, 
                           payment_date=payment_date, payment_method=payment_method, receipt=receipt)

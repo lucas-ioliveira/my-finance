@@ -36,6 +36,14 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped mt-3">
+
+                                        <form class="d-flex" role="search" method="GET" action="{% url 'revenue' %}">
+                                            <div class="input-group mb-3">
+                                            <input class="form-control" type="search" placeholder="Pesquisar"  name="search" aria-label="Search">
+                                            <button class="btn btn-outline-primary" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                            </div>
+                                        </form>
+
                                         <thead>
                                             <tr>
                                                 <th style="text-align: center;">Status</th>
@@ -80,7 +88,7 @@
                                                         {% if item.notes %}
                                                             {{ item.notes}}
                                                         {% else %}
-                                                            Não possui
+                                                        Não informado
                                                         {% endif %}
                                                     </td>
 
@@ -94,9 +102,9 @@
 
                                                     <td style="text-align: center;">
                                                         {% if item.receipt %}
-                                                            {{ item.receipt.url }}
+                                                            <a href="{{ item.receipt.url }}" target="_blank"><i class="fa-solid fa-eye"></i></a>
                                                         {% else %}
-                                                            Não possui
+                                                            Não informado
                                                         {% endif %}
                                                     </td>
                         
@@ -110,7 +118,7 @@
                                                                 '{{ item.description }}', 
                                                                 '{{ item.amount|floatformat:2 }}', 
                                                                 '{{ item.category.id }}', 
-                                                                '{{ item.notes|default:"Não possui" }}', 
+                                                                '{{ item.notes|default:"Não informado" }}', 
                                                                 '{{ item.payment_date|date:"Y-m-d" }}',
                                                                 '{{ item.payment_method }}',
                                                             )">
@@ -145,7 +153,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form method="post" action="{% url 'revenue' %}">
+                            <form method="post" action="{% url 'revenue' %}" enctype="multipart/form-data">
                                 {% csrf_token %}
 
                                 <div class="row mb-2">
@@ -195,7 +203,7 @@
 
                                     <div class="col-md-6">
                                         <label for="medico" class="form-label">Observação</label>
-                                        <textarea type="text" placeholder="Digite uma observação" class="form-control" name="observacao"></textarea>
+                                        <input type="text" placeholder="Digite uma observação" class="form-control" name="observacao">
                                     </div>
 
                                     
@@ -273,7 +281,7 @@
 
                                     <div class="col-md-6">
                                         <label for="medico" class="form-label">Observação</label>
-                                        <textarea type="text" placeholder="Digite uma observação" class="form-control"  id="observacao_edit" name="observacao_edit"></textarea>
+                                        <input type="text" placeholder="Digite uma observação" class="form-control"  id="observacao_edit" name="observacao_edit">
                                     </div>
 
                                 </div>
