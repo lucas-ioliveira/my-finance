@@ -27,3 +27,6 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')),
     path('wallet/', include('wallet.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+handler404 = 'common.views.custom_404'

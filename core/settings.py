@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-bk5)b8onbnz9)e4mny74qa(^=7_3@#@9u68f2egzr0!_9vhw+m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -125,6 +125,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Diretório de arquivos estáticos
+print(STATICFILES_DIRS)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')    # Diretório para coletar arquivos estáticos para produção
 
 MEDIA_URL = 'media/'
