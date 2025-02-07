@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
 
-from wallet.models import Category, Expense, Revenue
+from wallet.models import Category, Expense, Revenue, Investments
 
 @method_decorator(login_required, name='dispatch')
 class CategoryView(View):
@@ -48,7 +48,7 @@ class CategoryDeleteView(View):
         messages.success(request, "Categoria removida com sucesso!")
         return redirect('category')
 
-
+#Receitas
 @method_decorator(login_required, name='dispatch')
 class RevenueView(View):
     def get(self, request):
@@ -226,3 +226,98 @@ class ExpenseCloneView(View):
         expense.save()
         messages.success(request, "Despesa clonada com sucesso!")
         return redirect('expense')
+
+# Investimentos
+@method_decorator(login_required, name='dispatch')
+class InvestmentsView(View):
+    def get(self, request):
+        categorias = Category.objects.all().filter(user=request.user, active=True)
+        status = Investments.STATUS_CHOICES
+        investments = Investments.objects.all().filter(user=request.user, active=True)
+        
+        if request.GET.get('search'):
+            search = request.GET.get('search')
+            investments = Investments.objects.filter(user=request.user, active=True).filter(description__icontains=search)
+        
+        context = {
+            'investments': investments,
+            'status': status,
+            'categorias': categorias
+        }
+        return render(request, 'investments.html', context)
+    
+    def post(self, request):
+        # import ipdb; ipdb.set_trace()
+        user = request.user
+        description = request.POST.get('descricao')
+        notes = request.POST.get('observacao')
+        amount = request.POST.get('valor')
+        category = request.POST.get('categoria')
+
+        if request.POST.get('data_investimento'):
+            investment_date = request.POST.get('data_investimento')
+        else:
+            investment_date = None
+
+        investment_method = request.POST.get('metodo_investimento')
+        receipt = request.FILES.get('file')
+        
+        expense = Investments(user=user, description=description, notes=notes, amount=amount, category_id=category, 
+                          investment_date=investment_date, investment_method=investment_method, receipt=receipt)
+        expense.save()
+        messages.success(request, "Investimento cadastrada com sucesso!")
+        return redirect('investments')
+
+
+@method_decorator(login_required, name='dispatch')
+class InvestmentsEditView(View):
+    def post(self, request, investments_id):
+        description = request.POST.get('descricao_edit')
+        notes = request.POST.get('observacao_edit')
+        valor_edit = request.POST.get('valor_edit')
+        amount = float(valor_edit.replace(',', '.'))
+        category = request.POST.get('categoria_edit')
+
+        if request.POST.get('data_investimento_edit'):
+            investment_date = request.POST.get('data_investimento_edit')
+        else:
+            investment_date = None
+
+        due_date = request.POST.get('data_vencimento_edit')
+        investment_method = request.POST.get('metodo_investimento_edit')
+        receipt = request.POST.get('file_edit')
+        status = request.POST.get('status_edit')
+
+        investments = get_object_or_404(Investments, id=investments_id)
+        investments.description = description
+        investments.notes = notes
+        investments.amount = amount
+        investments.category_id = category
+        investments.investment_date = investment_date
+        investments.due_date = due_date
+        investments.investment_method = investment_method
+        investments.receipt = receipt
+        investments.status = status
+        investments.save()
+        messages.success(request, "Investimento atualizado com sucesso!")
+        return redirect('investments')
+    
+
+@method_decorator(login_required, name='dispatch')
+class InvestmentsDeleteView(View):
+    def post(self, request, investments_id):
+        # import ipdb; ipdb.set_trace()
+        investments = get_object_or_404(Investments, id=investments_id)
+        investments.active = False
+        investments.save()
+        messages.success(request, "Investimento removido com sucesso!")
+        return redirect('investments')
+
+@method_decorator(login_required, name='dispatch')
+class InvestmentsCloneView(View):
+    def post(self, request, investments_id):
+        investments = get_object_or_404(Investments, id=investments_id)
+        investments.pk = None
+        investments.save()
+        messages.success(request, "Investimento clonada com sucesso!")
+        return redirect('investments')

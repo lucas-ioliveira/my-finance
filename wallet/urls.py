@@ -1,7 +1,8 @@
 from django.urls import path
 from wallet.views import ( CategoryView, CategoryDeleteView, CategoryEditView,
                           RevenueView, RevenueEditView, RevenueDeleteView, RevenueCloneView,
-                          ExpenseView, ExpenseDeleteView, ExpenseEditView, ExpenseCloneView)
+                          ExpenseView, ExpenseDeleteView, ExpenseEditView, ExpenseCloneView,
+                          InvestmentsView, InvestmentsEditView, InvestmentsDeleteView, InvestmentsCloneView)
 
 urlpatterns = [
     
@@ -18,4 +19,9 @@ urlpatterns = [
     path('expense/delete/<int:expense_id>/', ExpenseDeleteView.as_view(), name='expense-delete'),
     path('expense/edit/<int:expense_id>/', ExpenseEditView.as_view(), name='expense-edit'),
     path('expense/clone/<int:expense_id>/', ExpenseCloneView.as_view(), name='expense-clone'),
+
+    path('investments/', InvestmentsView.as_view(), name='investments'),
+    path('investments/delete/<int:investments_id>/', InvestmentsDeleteView.as_view(), name='investments-delete'),
+    path('investments/edit/<int:investments_id>/', InvestmentsEditView.as_view(), name='investments-edit'),
+    path('investments/clone/<int:investments_id>/', InvestmentsCloneView.as_view(), name='investments-clone'),
 ]
