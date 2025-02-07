@@ -11,3 +11,21 @@ class CategoryAdmin(admin.ModelAdmin):
     list_filter = search_fields
 
 
+@admin.register(Expense)
+class ExpenseAdmin(admin.ModelAdmin):
+    list_display = ('id','user', 'description', 'amount', 'category', 'payment_date', 'due_date', 'payment_method', 
+                    'receipt', 'status', 'active', 'created_at', 'updated_at')
+    list_display_links = ('description','category')
+    search_fields = list_display_links
+    list_filter = search_fields
+
+
+@admin.register(Revenue)
+class RevenueAdmin(admin.ModelAdmin):
+    list_display = ('id','user', 'description', 'amount', 'category', 'payment_date', 'payment_method', 
+                    'receipt', 'status', 'active', 'created_at', 'updated_at')
+    list_display_links = ('description','category')
+    search_fields = list_display_links
+    list_filter = search_fields
+
+

@@ -41,9 +41,10 @@ class Revenue(Base):
 
 class Expense(Base):
     STATUS_CHOICES = [
-        ('Pendente', 'Pendente'),
-        ('Pago', 'Pago'),
+        ('Atrasado', 'Atrasado'),
         ('Cancelado', 'Cancelado'),
+        ('Pago', 'Pago'),
+        ('Pendente', 'Pendente'),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuário')
@@ -51,9 +52,8 @@ class Expense(Base):
     notes = models.TextField(blank=True, null=True, verbose_name='Observações')
     amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Valor')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, verbose_name='Categoria')
-    payment_date = models.DateField(verbose_name='Data de Pagamento')
+    payment_date = models.DateField(verbose_name='Data de Pagamento', null=True, blank=True)
     due_date = models.DateField(verbose_name='Data de Vencimento')
-    is_paid = models.BooleanField(default=False, verbose_name='Pago')
     payment_method = models.CharField(max_length=255, verbose_name='Forma de Pagamento')
     receipt = models.FileField(upload_to='receipts/expense/', blank=True, null=True, verbose_name='Comprovante')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pendente', verbose_name='Status')

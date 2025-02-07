@@ -7,7 +7,7 @@ from django.db.models import Sum
 
 from datetime import datetime, timedelta
 
-from wallet.models import Revenue
+from wallet.models import Revenue, Expense
 
 @method_decorator(login_required, name='dispatch')
 class DashboardView(View):
@@ -15,8 +15,9 @@ class DashboardView(View):
         data_limite = datetime.now() - timedelta(days=30)
 
         revenues_total = Revenue.objects.filter(user=request.user, active=True, created_at__gte=data_limite).aggregate(total_revenues=Sum('amount'))
-        
+        expense_total = Expense.objects.filter(user=request.user, active=True, created_at__gte=data_limite).aggregate(total_expenses=Sum('amount'))
         context = {
-            'revenues_total': revenues_total['total_revenues']
+            'revenues_total': revenues_total['total_revenues'],
+            'expense_total': expense_total['total_expenses']
         }
         return render(request, 'dashboard.html', context)

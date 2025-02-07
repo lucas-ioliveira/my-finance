@@ -1,8 +1,9 @@
 {% extends "base/base.html" %}
 {% load static %}
 {% load bootstrap4 %}
+{% load humanize %}
 
-{% block title %}MyFinance | Receitas{% endblock title %}
+{% block title %}MyFinance | Despesas{% endblock title %}
 
 {% block content %}
 
@@ -13,80 +14,147 @@
         <main>
             <div class="container-fluid px-4">
             
-                <h1 class="mt-4 ">Receitas</h1>
+                <h1 class="mt-4 ">Despesas</h1>
+                <hr class="mt-0 mb-4">
 
 
-                {% include "partials/messages/messages.html" %}
+                {% comment %} {% include "partials/messages/messages.html" %} {% endcomment %}
 
                 <div class="row mb-2 mt-3 justify-content-center">
 
-                    <div class="col-md-9">
+                    
+                    <div class="col-md-9 mt-5">
+
+                        <form class="d-flex" role="search" method="GET" action="{% url 'expense' %}">
+                            <div class="input-group mb-3">
+                                <input class="form-control" type="search" placeholder="Pesquisar"  name="search" aria-label="Search">
+                                <button class="btn btn-outline-primary" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                            </div>
+                        </form>
+
+
                         <div class="card shadow-sm">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <div>
                                 <i class="fas fa-table me-1"></i>
-                                Lista de entradas
+                                Lista de saídas
                                 </div>
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalInfoPessoais">
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalAddDespesa">
                                     <i class="fa-solid fa-plus"></i>
-                                    Adicionar
+                                    Adicionar despesa
                                 </button>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped mt-3">
+
+                                        
+
                                         <thead>
                                             <tr>
-                                                <th>Descrição</th>
-                                                <th>Valor</th>
-                                                <th>Categoria</th>
-                                                <th>Data de Pagamento</th>
-                                                <th>Forma de Pagamento</th>
-                                                <th>Comprovante</th>
-                                                <th>Ações</th>
+                                                <th style="text-align: center;">Status</th>
+                                                <th style="text-align: center;">Título</th>
+                                                <th style="text-align: center;">Valor</th>
+                                                <th style="text-align: center;">Categoria</th>
+                                                <th style="text-align: center;">Observação</th>
+                                                <th style="text-align: center;">Data de Vencimento</th>
+                                                <th style="text-align: center;">Data de Pagamento</th>
+                                                <th style="text-align: center;">Forma de Pagamento</th>
+                                                <th style="text-align: center;">Comprovante</th>
+                                                <th style="text-align: center;">Ações</th>
                                             </tr>
                                         </thead>
                                         
                                         <tbody>
-                                            {% for tarefa in tarefas %}
-                                            <tr>
-                    
-                                                <td class="text-truncate" style="max-width: 200px;">
-                                                    {{ tarefa.titulo }}
-                                                </td>
-                    
-                                                {% if tarefa.status == 'À fazer' %}
-                                                    <td class="badge badge-primary">
-                                                        {{ tarefa.status }}
+                                            {% for item in expense %}
+                                                <tr>
+                                                    
+                                                    <td style="text-align: center;">
+                                                        {% if item.status == 'Pendente' %}
+                                                            <span class="badge bg-warning">{{ item.status }}</span>
+                                                        {% elif item.status == 'Pago' %}
+                                                            <span class="badge bg-success">{{ item.status }}</span>
+                                                        {% elif item.status == 'Cancelado' %}
+                                                            <span class="badge bg-info">{{ item.status }}</span>
+                                                        {% elif item.status == 'Atrasado' %}
+                                                            <span class="badge bg-danger">{{ item.status }}</span>
+                                                        {% endif %}
                                                     </td>
-                                                {% elif tarefa.status == 'Andamento' %}
-                                                    <td class="badge badge-info">
-                                                        {{ tarefa.status }}
+                        
+                                                    <td style="text-align: center;">
+                                                        {{ item.description}}
                                                     </td>
-                                                {% elif tarefa.status == 'Pausado' %}
-                                                    <td class="badge badge-warning" style="color: white;">
-                                                        {{ tarefa.status }}
+
+                                                    <td style="text-align: center;">
+                                                        R${{ item.amount|floatformat:2|intcomma}}
                                                     </td>
-                                                {% elif tarefa.status == 'Concluido' %}
-                                                    <td class="badge badge-success">
-                                                        {{ tarefa.status }}
+
+                                                    <td style="text-align: center;">
+                                                        {{ item.category}}
                                                     </td>
-                                                {% endif %}
-                    
-                                                <td style="text-align: center;">
-                                                    {{ tarefa.data_criacao }}
-                                                </td>
-                    
-                                                <td style="text-align: center;">
-                                                    <div class="d-flex gap-2 justify-content-center align-items-center flex-wrap">
-                                                        {% include "partials/button/_button_detalhes.html" %}
-                                                        {% include "partials/button/_button_concluir_tarefa.html" %}
-                                                        {% include "partials/button/_button_editar_tarefa.html" %}
-                                                        {% include "partials/button/_button_clonar_tarefa.html" %}
-                                                        {% include "partials/button/_button_deletar_tarefa.html" %}
-                                                    </div>
-                                                </td>
-                                            </tr>
+
+                                                    <td style="text-align: center;">
+                                                        {% if item.notes %}
+                                                            {{ item.notes}}
+                                                        {% else %}
+                                                        Não informado
+                                                        {% endif %}
+                                                    </td>
+
+                                                    <td style="text-align: center;">
+                                                        {% if item.due_date %}
+                                                            {{ item.due_date|date:"d/m/Y"}}
+                                                        {% else %}
+                                                            Não informado
+                                                        {% endif %}
+                                                    </td>
+
+                                                    <td style="text-align: center;">
+                                                        {% if item.payment_date %}
+                                                            {{ item.payment_date|date:"d/m/Y"}}
+                                                        {% else %}
+                                                            Não informado
+                                                        {% endif %}
+                                                    </td>
+
+                                                    <td style="text-align: center;">
+                                                        {{ item.payment_method}}
+                                                    </td>
+
+                                                    <td style="text-align: center;">
+                                                        {% if item.receipt %}
+                                                            <a href="{{ item.receipt.url }}" target="_blank"><i class="fa-solid fa-eye"></i></a>
+                                                        {% else %}
+                                                            Não informado
+                                                        {% endif %}
+                                                    </td>
+                        
+                                                    <td style="text-align: center;">
+                                                        <div class="d-flex gap-2 justify-content-center align-items-center flex-wrap">
+
+                                                            <button type="submit" class="btn btn-warning btn-sm" 
+                                                            onclick="openModalEditDespesa(
+                                                                '{{ item.id }}', 
+                                                                '{{ item.status }}', 
+                                                                '{{ item.description }}', 
+                                                                '{{ item.amount|floatformat:2 }}', 
+                                                                '{{ item.category.id }}', 
+                                                                '{{ item.notes|default:"Não informado" }}',
+                                                                '{{ item.due_date|date:"Y-m-d" }}', 
+                                                                '{{ item.payment_date|date:"Y-m-d" }}',
+                                                                '{{ item.payment_method }}',
+                                                            )">
+                                                            <i class="fa-solid fa-pen text-white"></i>
+                                                            </button>
+                                                        
+                                                            <form method="POST"  class="d-inline-flex" action="{% url 'expense-delete' item.id %}" onsubmit="return confirmDelete(event)">
+                                                                {% csrf_token %}
+                                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                                <i class="fa-solid fa-trash"></i>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                             {% endfor %}
                                         </tbody>
                                     </table>
@@ -97,40 +165,82 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="modalInfoPessoais" tabindex="-1" role="dialog" aria-labelledby="labelInfoPessoais" aria-hidden="true">
-                <div class="modal-dialog">
+            <div class="modal fade" id="modalAddDespesa" tabindex="-1" role="dialog" aria-labelledby="labelAddDespesa" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="h5InfoPessoais">Editar Informações Pessoais</h5>
+                            <h5 class="modal-title" id="h5AddDespesa">Adicionar Saída</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form method="post" action="{% url 'profile' %}">
+                            <form method="post" action="{% url 'expense' %}" enctype="multipart/form-data">
                                 {% csrf_token %}
+
+                                <div class="row mb-2">
+
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Título da despesa</label>
+                                        <input type="text" placeholder="Digite uma descrição" class="form-control" name="descricao" required>
+                                    </div>
                                 
-                                <div class="mb-2">
-                                    <label for="medico" class="form-label">Nome</label>
-                                    <input type="text" placeholder="Digite o nome" class="form-control" name="nome" required>
-                                </div>
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Status</label>
+                                        <select class="form-select" name="status" required>
+                                            {% for item in status %}
+                                                <option value="{{ item.0 }}">{{ item.0 }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
 
-                                <div class="mb-2">
-                                    <label for="medico" class="form-label">Sobrenome</label>
-                                    <input type="text" placeholder="Digite o sobrenome" class="form-control" name="sobrenome" required>
-                                </div>
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Valor</label>
+                                        <input type="text" placeholder="Digite o valor" class="form-control" name="valor" required>
+                                    </div>
 
-                                <div class="mb-2">
-                                    <label for="medico" class="form-label">E-mail</label>
-                                    <input type="email" placeholder="Digite o e-mail" class="form-control" name="email" required>
-                                </div>
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Categorias</label>
+                                        <select class="form-select" name="categoria" required>
+                                            {% for categoria in categorias %}
+                                                <option value="{{ categoria.id }}">{{ categoria.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
 
-                                <input type="hidden" name="info" value="info_pessoais">
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Data de Vencimento</label>
+                                        <input type="date" placeholder="Digite o valor" class="form-control" name="data_vencimento" required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Data de Pagamento</label>
+                                        <input type="date" placeholder="Digite o valor" class="form-control" name="data_pagamento">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Forma de Pagamento</label>
+                                        <input type="text" placeholder="Digite a forma de pagamento" class="form-control" name="forma_pagamento" required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Comprovate</label>
+                                        <input type="file" placeholder="Digite a forma de pagamento" class="form-control" name="file">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Observação</label>
+                                        <input type="text" placeholder="Digite uma observação" class="form-control" name="observacao">
+                                    </div>
+
+                                    
+
+                                </div>
                               
                               
                                 <div class="modal-footer" style="margin-top:60px;">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                                    <button type="submit" class="btn btn-primary" id="salvarTarefa" onclick="sendEditarContato(event)">Salvar</button>
+                                    <button type="submit" class="btn btn-primary">Salvar</button>
                                 </div>
                             </form>
                         </div>
@@ -138,76 +248,79 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="modalInfoContato" tabindex="-1" role="dialog" aria-labelledby="labelInfoContato" aria-hidden="true">
-                <div class="modal-dialog modal-md">
+            <div class="modal fade" id="modalEditDespesa" tabindex="-1" role="dialog" aria-labelledby="labelEditReceita" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="h5InfoContato">Editar Informações de Contato</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
+                            <h5 class="modal-title" id="h5InfoPessoais">Editar Saída</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form method="post" action="{% url 'profile' %}">
+                            <form  id="formEditReceita" method="POST" action="">
                                 {% csrf_token %}
+
+                                <div class="row mb-2">
+
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Título do recebimento</label>
+                                        <input type="text" placeholder="Digite uma descrição" class="form-control"  id="descricao_edit" name="descricao_edit" required>
+                                    </div>
                                 
-                                <div class="row mb-2">
-                                    
                                     <div class="col-md-6">
-                                        <label for="cep" class="form-label">CEP</label>
-                                        <div class="d-flex">
-                                            <input type="text" placeholder="00000-000" class="form-control mr-3" name="cep" id="cep" required>
-                                            <button type="button" class="btn btn-primary" onclick="buscarEndereco()">Buscar</button>
-                                        </div>
-                                        
+                                        <label for="medico" class="form-label">Status</label>
+                                        <select class="form-select" id="status_edit" name="status_edit" required>
+                                            {% for item in status %}
+                                                <option value="{{ item.0 }}">{{ item.0 }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
+
                                     <div class="col-md-6">
-                                        <label for="logradouro" class="form-label">Logradouro</label>
-                                        <input type="text" placeholder="Digite o logradouro" class="form-control" name="logradouro" id="logradouro" required>
+                                        <label for="medico" class="form-label">Valor</label>
+                                        <input type="text" placeholder="Digite o valor" class="form-control"  id="valor_edit" name="valor_edit" required>
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Categorias</label>
+                                        <select class="form-select"  id="categoria_edit" name="categoria_edit" required>
+                                            {% for categoria in categorias %}
+                                                <option value="{{ categoria.id }}">{{ categoria.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Data de Vencimento</label>
+                                        <input type="date" placeholder="Digite o valor" class="form-control"  id="data_vencimento_edit" name="data_vencimento_edit" required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Data de Pagamento</label>
+                                        <input type="date" placeholder="Digite o valor" class="form-control"  id="data_pagamento_edit" name="data_pagamento_edit">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Forma de Pagamento</label>
+                                        <input type="text" placeholder="Digite a forma de pagamento" class="form-control"  id="forma_pagamento_edit" name="forma_pagamento_edit" required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Comprovate</label>
+                                        <input type="file" placeholder="Digite a forma de pagamento" class="form-control" name="file_edit">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Observação</label>
+                                        <input type="text" placeholder="Digite uma observação" class="form-control"  id="observacao_edit" name="observacao_edit">
+                                    </div>
+
                                 </div>
-            
-                                <div class="row mb-2">
-                                    
-                                    <div class="col-md-6">
-                                        <label for="numero" class="form-label">Número</label>
-                                        <input type="text" placeholder="Digite o número" class="form-control" name="numero" id="numero" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="bairro" class="form-label">Bairro</label>
-                                        <input type="text" placeholder="Digite o bairro" class="form-control" name="bairro" id="bairro" required>
-                                    </div>
-                                </div>
-            
-                                <div class="row mb-2">
-                                    
-                                    <div class="col-md-6">
-                                        <label for="cidade" class="form-label">Cidade</label>
-                                        <input type="text" placeholder="Digite a cidade" class="form-control" name="cidade" id="cidade" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="uf" class="form-label">UF</label>
-                                        <input type="text" placeholder="Digite o UF" class="form-control" name="uf" id="uf" required>
-                                    </div>
-                                </div>
-            
-                                <div class="row mb-2">
-                                    
-                                    <div class="col-md-6">
-                                        <label for="complemento" class="form-label">Complemento</label>
-                                        <input type="text" placeholder="Digite o complemento" class="form-control" name="complemento" id="complemento">
-                                    </div>
-                                    
-                                    <div class="col-md-6">
-                                        <label for="telefone" class="form-label">Telefone</label>
-                                        <input type="text" placeholder="Digite o telefone" class="form-control" name="telefone" required>
-                                    </div>
-                                </div>
-            
-                                <input type="hidden" name="info" value="info_contato">
-            
+                              
+                              
                                 <div class="modal-footer" style="margin-top:60px;">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                                     <button type="submit" class="btn btn-primary">Salvar</button>
                                 </div>
                             </form>
@@ -222,77 +335,52 @@
     </div>
 </div>
 
+{% include "partials/messages/messages.html" %}
+
+<script>
+    function confirmDelete(event) {
+        event.preventDefault();  // Impede o envio imediato do formulário
+    
+        Swal.fire({
+            title: 'Tem certeza?',
+            text: "Você realmente deseja excluir esta categoria?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sim, excluir!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.target.submit();  // Agora envia o formulário normalmente
+            }
+        });
+    }
+</script>
+
+<script>
+
+    function openModalEditDespesa(id, status, descricao, valor, categoria, observacao, data_vencimento, data_pagamento, forma_pagamento) {
+        document.getElementById('formEditReceita').action = `/wallet/expense/edit/${id}/`;
+        document.getElementById('status_edit').value = status;
+        document.getElementById('descricao_edit').value = descricao;
+        document.getElementById('valor_edit').value = valor;
+        document.getElementById('categoria_edit').value = parseInt(categoria, 10);
+        document.getElementById('data_pagamento_edit').value = data_pagamento;
+        document.getElementById('data_vencimento_edit').value = data_vencimento;
+        document.getElementById('forma_pagamento_edit').value = forma_pagamento;
+        document.getElementById('observacao_edit').value = observacao;
+
+        const modalEditDespesa = new bootstrap.Modal(document.getElementById('modalEditDespesa'));
+        modalEditDespesa.show();
+    }
+    
+</script>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
 
-        const cepInput = document.getElementById('cep');
-
-        function formatarCEP(inputElement) {
-            let cep = inputElement.value.replace(/\D/g, ''); // Remove tudo que não for número
-    
-            if (cep.length > 8) {
-            cep = cep.slice(0, 8); // Limita a 8 caracteres
-            }
-    
-            if (cep.length > 5) {
-            cep = `${cep.slice(0, 5)}-${cep.slice(5)}`; // Formato XXXXX-XXX
-            }
-    
-            inputElement.value = cep; 
-        }
-    
-        cepInput.addEventListener('input', function() {
-            formatarCEP(cepInput);
-        });
-
-        cepInput.addEventListener('past', function() {
-            formatarCEP(cepInput);
-        });
-    });
-
-    function buscarEndereco() {
-        const cepInput = document.getElementById('cep');
-        const cep = cepInput.value.replace(/\D/g, '');
-    
-        if (!cep || cep.length !== 8) {
-            alert('Por favor, insira um CEP válido.');
-            return;
-        }
-
-        fetch(`/accounts/profile/buscar-endereco/?cep=${cep}`)
-            .then(response => {
-                console.log('Status:', response.status); // Verifica o código de status
-                if (!response.ok) {
-                    throw new Error(`Erro ao buscar dados do CEP. Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Dados recebidos:', data); // Verifique o retorno
-                if (data.cep_info) {
-                    document.getElementById('logradouro').value = data.cep_info.logradouro || '';
-                    document.getElementById('bairro').value = data.cep_info.bairro || '';
-                    document.getElementById('cidade').value = data.cep_info.cidade || '';
-                    document.getElementById('uf').value = data.cep_info.estado || '';
-    
-                    const numeroEnderecoField = document.getElementById('numero');
-                    numeroEnderecoField.placeholder = 'Por favor, digite o número';
-    
-                } else {
-                    alert('CEP inválido ou não encontrado.');
-                    window.location.reload();
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao buscar CEP:', error.message); // Mostra o erro detalhado
-                alert('Erro ao buscar CEP. Verifique e tente novamente.');
-                window.location.reload();
-            });
-    }
-</script>
 
 {% endblock %}
