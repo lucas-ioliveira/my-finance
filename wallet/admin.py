@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from wallet.models import Category, Expense, Revenue
+from wallet.models import Category, Expense, Revenue, Investments
 
 
 @admin.register(Category)
@@ -28,4 +28,12 @@ class RevenueAdmin(admin.ModelAdmin):
     search_fields = list_display_links
     list_filter = search_fields
 
+
+@admin.register(Investments)
+class InvestmentsAdmin(admin.ModelAdmin):
+    list_display = ('id','user', 'description', 'amount', 'category', 'investment_date', 'investment_method', 
+                    'receipt', 'status', 'active', 'created_at', 'updated_at')
+    list_display_links = ('description','category')
+    search_fields = list_display_links
+    list_filter = search_fields
 
