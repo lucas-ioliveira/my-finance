@@ -39,10 +39,12 @@ class ProfileView(View):
     def get(self, request):
         user = request.user
         info_pessoais = get_object_or_404(User, id=user.id)
-        info_contato = get_object_or_404(ContactDetails, user=user)
+        # info_contato = get_object_or_404(ContactDetails, user=user) 
+        info_contato = ContactDetails.objects.filter(user=user).first()
+
         context = {
             'info_pessoais': info_pessoais,
-            'info_contato': info_contato
+            'info_contato': info_contato if info_contato else None
         }
         return render(request, 'profile.html', context)
     
