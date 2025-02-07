@@ -20,6 +20,37 @@
                     <div class="col-md-9 mt-5">
                         <div class="card shadow-sm">
                             <div class="card-header d-flex justify-content-between align-items-center">
+                                Informações de acesso
+                                
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalAlterarSenha">
+                                    <i class="fa-solid fa-pen text-white"></i>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <span>Usuário<span><br>
+                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{user.username}}</strong></span>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <span>Data de cadastro<span><br>
+                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{user.date_joined|date:"d/m/Y"}}</strong></span>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <span>Ultimo login<span><br>
+                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{user.last_login|date:"d/m/Y H:i"}}</strong></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-2 mt-3 justify-content-center">
+
+                    <div class="col-md-9 mt-5">
+                        <div class="card shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center">
                                 Informações pessoais
                                 
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalInfoPessoais">
@@ -216,6 +247,45 @@
                     </div>
                 </div>
             </div>
+
+            <div class="modal fade" id="modalAlterarSenha" tabindex="-1" role="dialog" aria-labelledby="labelAlterarSenha" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="h5AlterarSenha">Alterar Senha</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="{% url 'alterar_senha' %}">
+                                {% csrf_token %}
+                                
+                                <div class="mb-2">
+                                    <label for="senha_atual" class="form-label">Senha Atual</label>
+                                    <input type="password" placeholder="Digite a senha atual" class="form-control" name="old_password" required>
+                                </div>
+            
+                                <div class="mb-2">
+                                    <label for="nova_senha" class="form-label">Nova Senha</label>
+                                    <input type="password" placeholder="Digite a nova senha" class="form-control" name="new_password1" required>
+                                </div>
+            
+                                <div class="mb-2">
+                                    <label for="confirmar_nova_senha" class="form-label">Confirmar Nova Senha</label>
+                                    <input type="password" placeholder="Confirme a nova senha" class="form-control" name="new_password2" required>
+                                </div>
+            
+                                <div class="modal-footer" style="margin-top:60px;">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                    <button type="submit" class="btn btn-primary">Salvar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             
         </main>
 

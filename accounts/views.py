@@ -2,7 +2,7 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.views import View
 from django.contrib.auth.models import User
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -14,6 +14,15 @@ from accounts.models import ContactDetails
 from accounts.utils import Accounts
 
 
+class CustomLoginView(LoginView):
+    template_name = 'login.html'
+    success_url = reverse_lazy('dashboard')
+
+    def form_valid(self, form):
+        # Mensagem de sucesso após login
+        messages.success(self.request, "Bem-vindo!")
+        return super().form_valid(form)
+    
 class RegisterUserView(CreateView):
     form_class = CustomUserCreationForm
     template_name = 'register.html' 
@@ -22,6 +31,15 @@ class RegisterUserView(CreateView):
 class CustomLogoutView(LogoutView):
     def get(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
+
+method_decorator(login_required, name='dispatch')
+class CustomPasswordChangeView(PasswordChangeView):
+    template_name = 'profile.html' 
+    success_url = reverse_lazy('profile') 
+    
+    def form_valid(self, form):
+        messages.success(self.request, "Sua senha foi alterada com sucesso!")
+        return super().form_valid(form)
 
 method_decorator(login_required, name='dispatch')
 class EnderecoView(View):
@@ -39,7 +57,6 @@ class ProfileView(View):
     def get(self, request):
         user = request.user
         info_pessoais = get_object_or_404(User, id=user.id)
-        # info_contato = get_object_or_404(ContactDetails, user=user) 
         info_contato = ContactDetails.objects.filter(user=user).first()
 
         context = {
