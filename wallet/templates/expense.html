@@ -146,6 +146,12 @@
                                                             )">
                                                             <i class="fa-solid fa-pen text-white"></i>
                                                             </button>
+                                                            
+                                                            <form method="POST"  class="d-inline-flex" action="{% url 'expense-clone' item.id %}" onsubmit="return confirmClone(event)">
+                                                                {% csrf_token %}
+                                                                <button type="submit" class="btn btn-info btn-sm">
+                                                                    <i class="fa-solid fa-copy text-white"></i>
+                                                            </form>
                                                         
                                                             <form method="POST"  class="d-inline-flex" action="{% url 'expense-delete' item.id %}" onsubmit="return confirmDelete(event)">
                                                                 {% csrf_token %}
@@ -343,12 +349,33 @@
     
         Swal.fire({
             title: 'Tem certeza?',
-            text: "Você realmente deseja excluir esta categoria?",
+            text: "Você realmente deseja excluir esta despesa?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
             cancelButtonColor: '#3085d6',
             confirmButtonText: 'Sim, excluir!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.target.submit();  // Agora envia o formulário normalmente
+            }
+        });
+    }
+</script>
+
+<script>
+    function confirmClone(event) {
+        event.preventDefault();  // Impede o envio imediato do formulário
+    
+        Swal.fire({
+            title: 'Tem certeza?',
+            text: "Você realmente deseja clonar esta despesa?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, clonar!',
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {

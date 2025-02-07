@@ -121,7 +121,17 @@ class RevenueDeleteView(View):
         messages.success(request, "Receita removida com sucesso!")
         return redirect('revenue')
 
+@method_decorator(login_required, name='dispatch')
+class RevenueCloneView(View):
+    def post(self, request, revenue_id):
+        revenue = get_object_or_404(Revenue, id=revenue_id)
+        revenue.pk = None
+        revenue.save()
+        messages.success(request, "Receita clonada com sucesso!")
+        return redirect('revenue')
 
+
+# Despesas
 @method_decorator(login_required, name='dispatch')
 class ExpenseView(View):
     def get(self, request):
@@ -206,4 +216,13 @@ class ExpenseDeleteView(View):
         expense.active = False
         expense.save()
         messages.success(request, "Despesa removida com sucesso!")
+        return redirect('expense')
+
+@method_decorator(login_required, name='dispatch')
+class ExpenseCloneView(View):
+    def post(self, request, expense_id):
+        expense = get_object_or_404(Expense, id=expense_id)
+        expense.pk = None
+        expense.save()
+        messages.success(request, "Despesa clonada com sucesso!")
         return redirect('expense')
