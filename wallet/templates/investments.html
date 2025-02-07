@@ -41,7 +41,6 @@
                                 </div>
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalAddInvestimento">
                                     <i class="fa-solid fa-plus"></i>
-                                    Adicionar investimento
                                 </button>
                             </div>
                             <div class="card-body">
@@ -71,9 +70,11 @@
                                                     <td style="text-align: center;">
                                                         {% if item.status == 'Pendente' %}
                                                             <span class="badge bg-warning">{{ item.status }}</span>
-                                                        {% elif item.status == 'Pago' %}
+                                                        {% elif item.status == 'Realizado' %}
                                                             <span class="badge bg-success">{{ item.status }}</span>
                                                         {% elif item.status == 'Cancelado' %}
+                                                            <span class="badge bg-info">{{ item.status }}</span>
+                                                        {% elif item.status == 'Atrasado' %}
                                                             <span class="badge bg-danger">{{ item.status }}</span>
                                                         {% endif %}
                                                     </td>
