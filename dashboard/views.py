@@ -14,8 +14,10 @@ class DashboardView(View):
     def get(self, request):
         data_limite = datetime.now() - timedelta(days=30)
 
-        revenues_total = Revenue.objects.filter(user=request.user, active=True, created_at__gte=data_limite).aggregate(total_revenues=Sum('amount'))
-        expense_total = Expense.objects.filter(user=request.user, active=True, created_at__gte=data_limite).aggregate(total_expenses=Sum('amount'))
+        print(data_limite)
+
+        revenues_total = Revenue.objects.filter(user=request.user, active=True, payment_date__gte=data_limite).aggregate(total_revenues=Sum('amount'))
+        expense_total = Expense.objects.filter(user=request.user, active=True, due_date__gte=data_limite).aggregate(total_expenses=Sum('amount'))
         context = {
             'revenues_total': revenues_total['total_revenues'],
             'expense_total': expense_total['total_expenses']
