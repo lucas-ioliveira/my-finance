@@ -57,32 +57,55 @@
                 </div>
 
                 <div class="row mt-5">
+
                     <div class="col-xl-4">
                         <div class="card mb-4">
+
                             <div class="card-header">
                                 <i class="fas fa-chart-area me-1"></i>
                                 Receitas
                             </div>
-                            <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4">
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-chart-bar me-1"></i>
-                                Despesas
+
+                            <div class="card-body">
+                                <canvas id="receitasBarChart" width="100%" height="40">
+
+                                </canvas>
                             </div>
-                            <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+
                         </div>
                     </div>
 
                     <div class="col-xl-4">
                         <div class="card mb-4">
+
+                            <div class="card-header">
+                                <i class="fas fa-chart-bar me-1"></i>
+                                Despesas
+                            </div>
+
+                            <div class="card-body">
+                                <canvas id="despesasBarChart" width="100%" height="40">
+
+                                </canvas>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="card mb-4">
+
                             <div class="card-header">
                                 <i class="fas fa-chart-bar me-1"></i>
                                 Investimentos
                             </div>
-                            <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+
+                            <div class="card-body">
+                                <canvas id="investimentosBarChart" width="100%" height="40">
+
+                                </canvas>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -93,10 +116,84 @@
 
         {% include "partials/footer/_footer.html" %}
     </div>
-
-
-
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Obtém os valores do contexto Django
+        const revenuesTotal = {{ revenues_total|default:0 }};
+        const expensesTotal = {{ expense_total|default:0 }};
+        const investmentsTotal = {{ investments_total|default:0 }};
+
+        // Configuração do gráfico de receitas
+        const receitasCtx = document.getElementById("receitasBarChart").getContext("2d");
+        new Chart(receitasCtx, {
+            type: "bar",
+            data: {
+                labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+                datasets: [{
+                    label: "Total Receitas",
+                    data: [revenuesTotal],
+                    backgroundColor: "rgba(40, 167, 69, 0.5)", // Verde
+                    borderColor: "rgba(40, 167, 69, 1)",
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Configuração do gráfico de despesas
+        const despesasCtx = document.getElementById("despesasBarChart").getContext("2d");
+        new Chart(despesasCtx, {
+            type: "bar",
+            data: {
+                labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+                datasets: [{
+                    label: "Total Despesas",
+                    data: [expensesTotal],
+                    backgroundColor: "rgba(220, 53, 69, 0.5)", // Vermelho
+                    borderColor: "rgba(220, 53, 69, 1)",
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Configuração do gráfico de investimentos
+        const investimentosCtx = document.getElementById("investimentosBarChart").getContext("2d");
+        new Chart(investimentosCtx, {
+            type: "bar",
+            data: {
+                labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+                datasets: [{
+                    label: "Total Investimentos",
+                    data: [investmentsTotal],
+                    backgroundColor: "rgba(0, 123, 255, 0.5)", // Azul
+                    borderColor: "rgba(0, 123, 255, 1)",
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+    });
+</script>
+
 
 
 {% endblock content %}
