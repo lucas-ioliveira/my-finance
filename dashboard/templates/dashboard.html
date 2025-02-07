@@ -20,7 +20,11 @@
                     <div class="col-xl-4 col-md-6">
                         <div class="card bg-success text-white mb-4">
                             <div class="card-body">Receitas
-                                <h3 class="card-title">R$ {{ revenues_total|floatformat:2|intcomma }}</h3>
+                                {% if revenues_total %}
+                                    <h3 class="card-title">R$ {{ revenues_total|floatformat:2|intcomma }}</h3>
+                                {% else %}
+                                    <h3 class="card-title">R$ 0,00</h3>
+                                {% endif %}
                             </div>
                             
                             <div class="card-footer d-flex align-items-center justify-content-between">
@@ -33,7 +37,11 @@
                     <div class="col-xl-4 col-md-6">
                         <div class="card bg-danger text-white mb-4">
                             <div class="card-body">Despesas
-                                <h3 class="card-title">R$ {{ expense_total|floatformat:2|intcomma }}</h3>
+                                {% if expense_total %}
+                                    <h3 class="card-title">R$ {{ expense_total|floatformat:2|intcomma }}</h3>
+                                {% else %}
+                                    <h3 class="card-title">R$ 0,00</h3>
+                                {% endif %}
                             </div>
                             
                             <div class="card-footer d-flex align-items-center justify-content-between">
@@ -45,7 +53,11 @@
                     <div class="col-xl-4 col-md-6">
                         <div class="card bg-primary text-white mb-4">
                             <div class="card-body">Investimentos
-                                <h3 class="card-title">R$ {{ investments_total|floatformat:2|intcomma }}</h3>
+                                {% if investments_total %}
+                                    <h3 class="card-title">R$ {{ investments_total|floatformat:2|intcomma }}</h3>
+                                {% else %}
+                                    <h3 class="card-title">R$ 0,00</h3>
+                                {% endif %}
                             </div>
                             
                             <div class="card-footer d-flex align-items-center justify-content-between">
@@ -117,6 +129,27 @@
         {% include "partials/footer/_footer.html" %}
     </div>
 </div>
+
+<script>
+    function eyeOn(type, amount) {
+        
+        let faEye = document.querySelector('.fa-eye');
+        let cardTitle = document.querySelector('.card-title');
+
+        if (type == 'revenue') {
+            faEye.setAttribute('class', 'fa-solid fa-eye-slash mt-2');
+            cardTitle.innerHTML = 'amount';
+        } else if (type == 'expense') {
+            faEye.setAttribute('class', 'fa-solid fa-eye-slash mt-2');
+            cardTitle.innerHTML = 'amount';
+        } else if (type == 'investments') {
+            faEye.setAttribute('class', 'fa-solid fa-eye-slash mt-2');
+            cardTitle.innerHTML = 'amount';
+        }
+
+    }
+
+</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
