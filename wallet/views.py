@@ -71,6 +71,7 @@ class RevenueView(View):
         description = request.POST.get('descricao')
         notes = request.POST.get('observacao')
         amount = request.POST.get('valor')
+        amount = float(amount.replace(',', '.'))
         category = request.POST.get('categoria')
         payment_date = request.POST.get('data_pagamento')
         payment_method = request.POST.get('forma_pagamento')
@@ -155,6 +156,7 @@ class ExpenseView(View):
         description = request.POST.get('descricao')
         notes = request.POST.get('observacao')
         amount = request.POST.get('valor')
+        amount = float(amount.replace(',', '.'))
         category = request.POST.get('categoria')
 
         if request.POST.get('data_pagamento'):
@@ -252,6 +254,7 @@ class InvestmentsView(View):
         description = request.POST.get('descricao')
         notes = request.POST.get('observacao')
         amount = request.POST.get('valor')
+        amount = float(amount.replace(',', '.'))
         category = request.POST.get('categoria')
 
         if request.POST.get('data_investimento'):
