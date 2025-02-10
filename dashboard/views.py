@@ -14,7 +14,7 @@ class DashboardView(View):
         data_limite = datetime.now() - timedelta(days=30)
 
         revenues_total = Revenue.objects.filter(user=request.user, active=True, status='Pago', payment_date__gte=data_limite).aggregate(total_revenues=Sum('amount'))
-        expense_total = Expense.objects.filter(user=request.user, due_date__gte=data_limite).aggregate(total_expenses=Sum('amount'))
+        expense_total = Expense.objects.filter(user=request.user, active=True, due_date__gte=data_limite).aggregate(total_expenses=Sum('amount'))
         investments_total = Investments.objects.filter(user=request.user, active=True, status='Realizado' , investment_date__gte=data_limite).aggregate(total_investments=Sum('amount'))
 
         context = {
