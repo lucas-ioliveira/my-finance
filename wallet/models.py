@@ -5,7 +5,7 @@ from common.models import Base
 
 class Category(Base):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuário')
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
 
     class Meta:
