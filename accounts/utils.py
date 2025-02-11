@@ -1,4 +1,5 @@
 import requests
+import re
 
 from accounts.models import ContactDetails
 
@@ -22,17 +23,31 @@ class Accounts:
         else:
             raise Exception(f"Erro externo: {response.status_code} - {response.text}")
 
+
     @staticmethod
     def atualizar_info_contato(user, data_post):
-        data_db = ContactDetails.objects.get(user=user)
+        try:
+            data_db = ContactDetails.objects.get(user=user)
+        except ContactDetails.DoesNotExist:
+            data_db = None
+
         contato = {
-            'cep': data_post.get('cep', data_db.cep),
-            'address': data_post.get('logradouro', data_db.address),
-            'number_address': data_post.get('numero', data_db.number_address),
-            'district': data_post.get('bairro', data_db.district),
-            'city': data_post.get('cidade', data_db.city),
-            'state': data_post.get('estado', data_db.state),
-            'complement': data_post.get('complemento', data_db.complement),
-            'phone': data_post.get('telefone', data_db.phone),
+            'cep': data_post.get('cep', getattr(data_db, 'cep', None)),
+            'address': data_post.get('logradouro', getattr(data_db, 'address', None)),
+            'number_address': data_post.get('numero', getattr(data_db, 'number_address', None)),
+            'district': data_post.get('bairro', getattr(data_db, 'district', None)),
+            'city': data_post.get('cidade', getattr(data_db, 'city', None)),
+            'state': data_post.get('uf', getattr(data_db, 'state', None)),
+            'complement': data_post.get('complemento', getattr(data_db, 'complement', None)),
+            'phone': data_post.get('telefone', getattr(data_db, 'phone', None)),
         }
-        return ContactDetails.objects.filter(user=user).update(**contato)
+
+        contato['cep'] = re.sub(r'\D', '', contato['cep'])
+        contato['phone'] = re.sub(r'\D', '', contato['phone'])
+
+        if data_db:
+            return ContactDetails.objects.filter(user=user).update(**contato)
+        else:
+            return ContactDetails.objects.create(user=user, **contato)
+
+
