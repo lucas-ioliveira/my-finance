@@ -1,0 +1,17 @@
+<div style="display:flex; justify-content:flex-end; width:100%;">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {% for pagina in categories.paginator.page_range %}
+                {% if categories.number == pagina %}
+                    <li class="page-item active">
+                        <a class="page-link" href="?page={{ pagina }}&search={{ request.GET.search }}">{{ pagina }}</a>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ pagina }}&search={{ request.GET.search }}">{{ pagina }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </nav>
+</div>

@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-
+from django.core.paginator import Paginator
 
 from wallet.models import Category, Expense, Revenue, Investments
 
@@ -14,6 +14,11 @@ class CategoryView(View):
         if request.GET.get('search'):
             search = request.GET.get('search')
             categories = Category.objects.filter(user=request.user, active=True).filter(name__icontains=search)
+        
+        paginator = Paginator(categories, 6)
+        page = request.GET.get('page')
+        categories = paginator.get_page(page)
+        
         return render(request, 'category.html', {'categories': categories})
     
     def post(self, request):
@@ -58,6 +63,10 @@ class RevenueView(View):
         if request.GET.get('search'):
             search = request.GET.get('search')
             revenue = Revenue.objects.filter(user=request.user, active=True).filter(description__icontains=search)
+        
+        paginator = Paginator(revenue, 6)
+        page = request.GET.get('page')
+        revenue = paginator.get_page(page)
         
         context = {
             'revenue': revenue,
@@ -138,10 +147,15 @@ class ExpenseView(View):
     def get(self, request):
         categorias = Category.objects.all().filter(user=request.user, active=True)
         status = Expense.STATUS_CHOICES
-        expense = Expense.objects.all().filter(user=request.user, active=True)
+        expense = Expense.objects.filter(user=request.user, active=True)
+
         if request.GET.get('search'):
             search = request.GET.get('search')
             expense = Expense.objects.filter(user=request.user, active=True).filter(description__icontains=search)
+        
+        paginator = Paginator(expense, 6)
+        page = request.GET.get('page')
+        expense = paginator.get_page(page)
         
         context = {
             'expense': expense,
@@ -240,6 +254,11 @@ class InvestmentsView(View):
         if request.GET.get('search'):
             search = request.GET.get('search')
             investments = Investments.objects.filter(user=request.user, active=True).filter(description__icontains=search)
+        
+        paginator = Paginator(investments, 6)
+        page = request.GET.get('page')
+        investments = paginator.get_page(page)
+        
         
         context = {
             'investments': investments,

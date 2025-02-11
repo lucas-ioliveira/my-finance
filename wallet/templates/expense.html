@@ -17,9 +17,6 @@
                 <h1 class="mt-4 ">Despesas</h1>
                 <hr class="mt-0 mb-4">
 
-
-                {% comment %} {% include "partials/messages/messages.html" %} {% endcomment %}
-
                 <div class="row mb-2 mt-3 justify-content-center">
 
                     
@@ -50,9 +47,6 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped mt-3">
-
-                                        
-
                                         <thead>
                                             <tr>
                                                 <th style="text-align: center;">Status</th>
@@ -167,6 +161,7 @@
                                             {% endfor %}
                                         </tbody>
                                     </table>
+                                    {% include 'partials/paginate/_expense.html' %}
                                 </div>
                             </div>
                         </div>
