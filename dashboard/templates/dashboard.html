@@ -17,7 +17,8 @@
                 <hr class="mt-0 mb-4">
                 
                 <div class="row mt-5">
-                    <div class="col-xl-4 col-md-6">
+
+                    <div class="col-xl-3 col-md-6">
                         <div class="card bg-success text-white mb-4">
                             <div class="card-body">Receitas
                                 {% if revenues_total %}
@@ -34,7 +35,7 @@
                         </div>
                         
                     </div>
-                    <div class="col-xl-4 col-md-6">
+                    <div class="col-xl-3 col-md-6">
                         <div class="card bg-danger text-white mb-4">
                             <div class="card-body">Despesas
                                 {% if expense_total %}
@@ -50,7 +51,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-4 col-md-6">
+                    <div class="col-xl-3 col-md-6">
                         <div class="card bg-primary text-white mb-4">
                             <div class="card-body">Investimentos
                                 {% if investments_total %}
@@ -66,33 +67,95 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card bg-info text-white mb-4">
+                            <div class="card-body">Saldo
+                                {% if investments_total %}
+                                    <h3 class="card-title">R$ {{ balance|floatformat:2|intcomma }}</h3>
+                                {% else %}
+                                    <h3 class="card-title">R$ 0,00</h3>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a class="small text-white stretched-link" href="{% url 'investments' %}">Ver Detalhes</a>
+                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="row mt-5">
+                {% comment %} <div class="row mt-5">
 
                     <div class="col-xl-4">
-                        <div class="card mb-4">
+                        <div class="card mb-6">
 
                             <div class="card-header">
-                                <i class="fas fa-chart-area me-1"></i>
-                                Receitas
+                                <i class="fas fa-table me-1"></i>
+                                Atividades recentes
                             </div>
 
                             <div class="card-body">
-                                <canvas id="receitasBarChart" width="100%" height="40">
 
-                                </canvas>
+                                <div class="table-responsive">
+                                    <table class="table table-striped mt-3">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: center;">Status</th>
+                                                <th style="text-align: center;">Título</th>
+                                                <th style="text-align: center;">Valor</th>
+                                                <th style="text-align: center;">Data de Vencimento</th>
+                                            </tr>
+                                        </thead>
+                                        
+                                        <tbody>
+                                            {% for item in recent_transactions %}
+                                                <tr>
+                                                    
+                                                    <td style="text-align: center;">
+                                                        {% if item.status == 'Pendente' %}
+                                                            <span class="badge bg-warning">{{ item.status }}</span>
+                                                        {% elif item.status == 'Pago' %}
+                                                            <span class="badge bg-success">{{ item.status }}</span>
+                                                        {% elif item.status == 'Cancelado' %}
+                                                            <span class="badge bg-info">{{ item.status }}</span>
+                                                        {% elif item.status == 'Atrasado' %}
+                                                            <span class="badge bg-danger">{{ item.status }}</span>
+                                                        {% endif %}
+                                                    </td>
+                        
+                                                    <td style="text-align: center;">
+                                                        {{ item.description}}
+                                                    </td>
+
+                                                    <td style="text-align: center;">
+                                                        R${{ item.amount|floatformat:2|intcomma}}
+                                                    </td>
+
+                                                    <td style="text-align: center;">
+                                                        {% if item.due_date %}
+                                                            {{ item.due_date|date:"d/m/Y"}}
+                                                        {% else %}
+                                                            Não informado
+                                                        {% endif %}
+                                                    </td>
+
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
                             </div>
 
                         </div>
                     </div>
 
                     <div class="col-xl-4">
-                        <div class="card mb-4">
+                        <div class="card mb-6">
 
                             <div class="card-header">
-                                <i class="fas fa-chart-bar me-1"></i>
-                                Despesas
+                         
+                                <i class="fa-solid fa-coins"></i>
+                                Taxas de cambio
                             </div>
 
                             <div class="card-body">
@@ -104,23 +167,7 @@
 
                     </div>
 
-                    <div class="col-xl-4">
-                        <div class="card mb-4">
-
-                            <div class="card-header">
-                                <i class="fas fa-chart-bar me-1"></i>
-                                Investimentos
-                            </div>
-
-                            <div class="card-body">
-                                <canvas id="investimentosBarChart" width="100%" height="40">
-
-                                </canvas>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
+                </div> {% endcomment %}
                 
             </div>
         </main>
@@ -133,28 +180,7 @@
 {% include "partials/messages/messages.html" %}
 
 <script>
-    function eyeOn(type, amount) {
-        
-        let faEye = document.querySelector('.fa-eye');
-        let cardTitle = document.querySelector('.card-title');
-
-        if (type == 'revenue') {
-            faEye.setAttribute('class', 'fa-solid fa-eye-slash mt-2');
-            cardTitle.innerHTML = 'amount';
-        } else if (type == 'expense') {
-            faEye.setAttribute('class', 'fa-solid fa-eye-slash mt-2');
-            cardTitle.innerHTML = 'amount';
-        } else if (type == 'investments') {
-            faEye.setAttribute('class', 'fa-solid fa-eye-slash mt-2');
-            cardTitle.innerHTML = 'amount';
-        }
-
-    }
-
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
+    /*document.addEventListener("DOMContentLoaded", function () {
         // Obtém os valores do contexto Django
         const revenuesTotal = {{ revenues_total|default:0 }};
         const expensesTotal = {{ expense_total|default:0 }};
@@ -226,7 +252,7 @@
             }
         });
 
-    });
+    });*/
 </script>
 
 

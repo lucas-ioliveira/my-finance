@@ -7,7 +7,7 @@ from django.db.models import Sum
 from datetime import datetime, timedelta
 
 from wallet.models import Revenue, Expense, Investments
-
+from dashboard.utils import Dashboard
 @method_decorator(login_required, name='dispatch')
 class DashboardView(View):
     def get(self, request):
@@ -16,11 +16,17 @@ class DashboardView(View):
         revenues_total = Revenue.objects.filter(user=request.user, active=True, status='Pago', payment_date__gte=data_limite).aggregate(total_revenues=Sum('amount'))
         expense_total = Expense.objects.filter(user=request.user, active=True, due_date__gte=data_limite).aggregate(total_expenses=Sum('amount'))
         investments_total = Investments.objects.filter(user=request.user, active=True, status='Realizado' , investment_date__gte=data_limite).aggregate(total_investments=Sum('amount'))
+        balance = revenues_total['total_revenues'] - expense_total['total_expenses'] - investments_total['total_investments']
+
+        recent_transactions = Dashboard.get_recent_transactions()
+
 
         context = {
             'revenues_total': revenues_total['total_revenues'],
             'expense_total': expense_total['total_expenses'],
             'investments_total': investments_total['total_investments'],
+            'balance': balance,
+            'recent_transactions': recent_transactions
         }
         
         return render(request, 'dashboard.html', context)
