@@ -85,7 +85,7 @@ class RevenueView(View):
         payment_date = request.POST.get('data_pagamento')
         payment_method = request.POST.get('forma_pagamento')
         receipt = request.FILES.get('file')
-        import ipdb; ipdb.set_trace()
+        # import ipdb; ipdb.set_trace()
 
         revenue = Revenue(user=user, description=description, notes=notes, amount=amount, category_id=category, 
                           payment_date=payment_date, payment_method=payment_method, receipt=receipt)
