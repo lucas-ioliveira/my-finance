@@ -36,7 +36,7 @@ jobs:
           echo "ALLOWED_HOSTS=127.0.0.1" >> .env
 
       - name: Subir containers do Docker
-        run: docker-compose up -d --build
+        run: docker-compose -f docker-compose.yml up -d --build
 
       - name: Rodar migrações
         run: docker-compose exec -T web python manage.py migrate
