@@ -15,4 +15,5 @@ RUN apt-get update \
 
 RUN pip install --upgrade pip
 RUN pip3 install -r requirements.txt
+RUN python manage.py test
 RUN chmod -R 777 /app
