@@ -1,0 +1,45 @@
+name: MyFinance CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Criar e ativar virtualenv
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Configurar variáveis de ambiente
+        run: |
+          echo "DEBUG=False" >> .env
+          echo "SECRET_KEY=supersecreta" >> .env
+          echo "ALLOWED_HOSTS=127.0.0.1" >> .env
+
+      - name: Subir containers do Docker
+        run: docker-compose up -d --build
+
+      - name: Rodar migrações
+        run: docker-compose exec -T web python manage.py migrate
+
+      - name: Rodar testes
+        run: docker-compose exec -T web python manage.py test
