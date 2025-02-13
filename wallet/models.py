@@ -10,6 +10,8 @@ class Category(Base):
 
     class Meta:
         ordering = ['name']
+        verbose_name = 'Categoria'
+        verbose_name_plural = 'Categorias'
 
     def __str__(self):
         return self.name
@@ -34,6 +36,8 @@ class Revenue(Base):
 
     class Meta:
         ordering = ['-created_at']
+        verbose_name = 'Receita'
+        verbose_name_plural = 'Receitas'
 
     def __str__(self):
         return self.description
@@ -60,6 +64,8 @@ class Expense(Base):
 
     class Meta:
         ordering = ['-created_at']
+        verbose_name = 'Despesa'
+        verbose_name_plural = 'Despesas'
 
     def __str__(self):
         return self.description
@@ -84,6 +90,8 @@ class Investments(Base):
 
     class Meta:
         ordering = ['-created_at']
+        verbose_name = 'Investimento'
+        verbose_name_plural = 'Investimentos'
 
     def __str__(self):
         return self.description
