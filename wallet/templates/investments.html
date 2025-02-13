@@ -28,7 +28,7 @@
                         <form class="d-flex" role="search" method="GET" action="{% url 'investments' %}">
                             <div class="input-group mb-3">
                                 <input class="form-control" type="search" placeholder="Pesquisar"  name="search" aria-label="Search">
-                                <button class="btn btn-outline-primary" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                <button class="btn btn-outline-primary" type="submit"><i class="fa-solid fa-magnifying-glass" title="Pesquisar"></i></button>
                             </div>
                         </form>
 
@@ -39,7 +39,7 @@
                                 <i class="fas fa-table me-1"></i>
                                 Lista de investimentos
                                 </div>
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalAddInvestimento">
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalAddInvestimento" title="Adicionar Investimento">
                                     <i class="fa-solid fa-plus"></i>
                                 </button>
                             </div>
@@ -128,20 +128,22 @@
                                                                 '{{ item.notes|default:"Não informado" }}', 
                                                                 '{{ item.investment_date|date:"Y-m-d" }}',
                                                                 '{{ item.investment_method|default:"Não informado" }}',
-                                                            )">
+                                                            )" title="Editar">
                                                             <i class="fa-solid fa-pen text-white"></i>
                                                             </button>
 
                                                             <form method="POST"  class="d-inline-flex" action="{% url 'investments-clone' item.id %}" onsubmit="return confirmClone(event)">
                                                                 {% csrf_token %}
-                                                                <button type="submit" class="btn btn-info btn-sm">
+                                                                <button type="submit" class="btn btn-info btn-sm" title="Clonar">
                                                                     <i class="fa-solid fa-copy text-white"></i>
+                                                                </button>
                                                             </form>
                                                         
                                                             <form method="POST"  class="d-inline-flex" action="{% url 'investments-delete' item.id %}" onsubmit="return confirmDelete(event)">
                                                                 {% csrf_token %}
-                                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                                <button type="submit" class="btn btn-danger btn-sm" title="Excluir">
                                                                 <i class="fa-solid fa-trash"></i>
+                                                                </button>
                                                             </form>
                                                         </div>
                                                     </td>
