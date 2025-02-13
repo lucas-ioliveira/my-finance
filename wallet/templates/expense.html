@@ -345,7 +345,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form  id="formEditReceita" method="POST" action="">
+                            <form  id="formEditReceita" method="GET" action="{% url 'report' %}">
                                 {% csrf_token %}
 
                                 <div class="row mb-2">
@@ -386,6 +386,8 @@
                                     </div>
 
                                 </div>
+
+                                <input type="hidden" name="model" value="Expense">
                               
                               
                                 <div class="modal-footer" style="margin-top:60px;">

@@ -39,9 +39,12 @@
                                 <i class="fas fa-table me-1"></i>
                                 Lista de investimentos
                                 </div>
+                                <div>
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalAddInvestimento" title="Adicionar Investimento">
                                     <i class="fa-solid fa-plus"></i>
                                 </button>
+                                <button class="btn btn-primary btn-sm" type="submit" data-toggle="modal" data-target="#modalExportarInvestimento" title="Exportar"><i class="fa-solid fa-download"></i></i></button>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -305,6 +308,66 @@
                               
                                 <div class="modal-footer" style="margin-top:60px;">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                    <button type="submit" class="btn btn-primary">Salvar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="modalExportarInvestimento" tabindex="-1" role="dialog" aria-labelledby="labelEditReceita" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="h5InfoPessoais">Exportar investimentos</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form  id="formEditReceita" method="GET" action="{% url 'report' %}">
+                                {% csrf_token %}
+
+                                <div class="row mb-2">
+                                
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Status</label>
+                                        <select class="form-select" id="status_exportar" name="status_exportar">
+                                            <option value="todos">Todos</option>
+                                            {% for item in status %}
+                                                <option value="{{ item.0 }}">{{ item.0 }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Categorias</label>
+                                        <select class="form-select"  id="categoria_exportar" name="categoria_exportar">
+                                            <option value="todos">Todos</option>
+                                            {% for categoria in categorias %}
+                                                <option value="{{ categoria.id }}">{{ categoria.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Data do Investimento</label>
+                                        <input type="date" placeholder="Digite o valor" class="form-control"  id="data_pagamento_exportar" name="data_pagamento_exportar">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Forma de Investimento</label>
+                                        <input type="text" placeholder="Digite a forma de pagamento" class="form-control"  id="forma_pagamento_exportar" name="forma_pagamento_exportar">
+                                    </div>
+
+                                </div>
+
+                                <input type="hidden" name="model" value="Investments">
+                              
+                              
+                                <div class="modal-footer" style="margin-top:60px;">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                                     <button type="submit" class="btn btn-primary">Salvar</button>
                                 </div>
                             </form>
