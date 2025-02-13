@@ -1,0 +1,182 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}MyFinance | Dashboard{% endblock title%}
+
+{% block content %}
+
+{% include "partials/topnav/_topnav.html" %}
+<div id="layoutSidenav">
+
+    {% include "partials/sidenav/_sidenav.html" %}
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">Dashboard</h1>
+                <hr class="mt-0 mb-4">
+                
+                <!-- Primeira linha com as 4 cards -->
+                <div class="row mt-5">
+                    <div class="col-xl-3 col-md-6 col-sm-12">
+                        <div class="card bg-success text-white mb-4">
+                            <div class="card-body">Receitas
+                                {% if revenues_total %}
+                                    <h3 class="card-title">R$ {{ revenues_total|floatformat:2|intcomma }}</h3>
+                                {% else %}
+                                    <h3 class="card-title">R$ 0,00</h3>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a class="small text-white stretched-link" href="{% url 'revenue' %}">Ver Detalhes</a>
+                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 col-sm-12">
+                        <div class="card bg-danger text-white mb-4">
+                            <div class="card-body">Despesas
+                                {% if expense_total %}
+                                    <h3 class="card-title">R$ {{ expense_total|floatformat:2|intcomma }}</h3>
+                                {% else %}
+                                    <h3 class="card-title">R$ 0,00</h3>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a class="small text-white stretched-link" href="{% url 'expense' %}">Ver Detalhes</a>
+                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 col-sm-12">
+                        <div class="card bg-primary text-white mb-4">
+                            <div class="card-body">Investimentos
+                                {% if investments_total %}
+                                    <h3 class="card-title">R$ {{ investments_total|floatformat:2|intcomma }}</h3>
+                                {% else %}
+                                    <h3 class="card-title">R$ 0,00</h3>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a class="small text-white stretched-link" href="{% url 'investments' %}">Ver Detalhes</a>
+                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 col-sm-12">
+                        <div class="card bg-info text-white mb-4">
+                            <div class="card-body">Saldo
+                                {% if investments_total %}
+                                    <h3 class="card-title">R$ {{ balance|floatformat:2|intcomma }}</h3>
+                                {% else %}
+                                    <h3 class="card-title">R$ 0,00</h3>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a class="small text-white stretched-link" href="{% url 'investments' %}">Ver Detalhes</a>
+                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Segunda linha com as 2 tabelas -->
+                <div class="row mt-5">
+
+                    <div class="col-xl-6 col-md-6 col-sm-12">
+                        <div class="card mb-6">
+                            <div class="card-header">
+                                <i class="fa-solid fa-coins"></i>
+                                Taxas de câmbio
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped mt-3">
+                                        <thead>
+                                            <tr>
+                                                <th>Moeda</th>
+                                                <th>Tipo</th>
+                                                <th>Valor Atual</th>
+                                                <th>Data</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in exchange_rates %}
+                                                <tr>
+                                                    <td>
+                                                        {% if  item.code == 'USD' %}
+                                                            <span class="badge rounded-pill bg-info">USD</span>
+                                                        {% elif item.code == 'EUR' %}
+                                                            <span class="badge rounded-pill bg-info">EUR</span>
+                                                        {% elif item.code == 'BTC' %}
+                                                            <span class="badge rounded-pill bg-info">BTC</span>
+                                                        {% endif %}
+                                                        
+                                                    </td>
+                                                    <td>{{ item.name }}</td>
+                                                    <td>R$ {{ item.high|floatformat:2|intcomma }}</td>
+                                                    <td>{% now 'd/m/Y' %}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-md-6 col-sm-12">
+                        <div class="card mb-6">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Atividades recentes
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped mt-3">
+                                        <thead>
+                                            <tr>
+                                                <th>Método</th>
+                                                <th>Ação</th>
+                                                <th>Descrição</th>
+                                                <th>Data</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in recent_transactions %}
+                                                <tr>
+                                                    <td>
+                                                        {% if  item.event_type == 1 %}
+                                                            <span class="badge rounded-pill bg-success">Criação</span>
+                                                        {% elif item.event_type == 2 %}
+                                                            <span class="badge rounded-pill bg-warning">Atualização</span>
+                                                        {% elif item.event_type == 3 %}
+                                                            <span class="badge rounded-pill bg-danger">Exclusão</span>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ item.content_type }}</td>
+                                                    <td>{{ item.object_repr }}</td>
+                                                    <td>{{ item.datetime|date:"d/m/Y H:i" }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        {% include "partials/footer/_footer.html" %}
+    </div>
+</div>
+
+{% include "partials/messages/messages.html" %}
+
+{% endblock content %}

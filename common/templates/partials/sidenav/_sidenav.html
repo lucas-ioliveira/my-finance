@@ -1,0 +1,55 @@
+<div id="layoutSidenav_nav">
+    <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+        <div class="sb-sidenav-menu">
+            <div class="nav">
+
+                <div class="sb-sidenav-menu-heading">Principal</div>
+
+                {% comment %} <a class="nav-link" href="index.html" style="display: flex; align-items: center; gap: 5px;">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-bell"></i></i></div>
+                    <span>Avisos</span>
+                    <span class="badge bg-info">100</span>
+                </a> {% endcomment %}
+
+                <a class="nav-link" href="{% url "dashboard" %}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Dashboard
+                </a>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="index.html" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="sb-nav-link-icon"><i class="fas fa-wallet"></i></div>
+                        Minha carteira
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{% url "category" %}">Categorias</a></li>
+                        <li><a class="dropdown-item" href="{% url "expense" %}">Despesas</a></li>
+                        <li><a class="dropdown-item" href="{% url "investments" %}">Investimentos</a></li>
+                        <li><a class="dropdown-item" href="{% url "revenue" %}">Receitas</a></li>
+                    </ul>
+                </li>
+
+                <a class="nav-link" href="{% url "profile" %}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-user"></i></div>
+                    Perfil
+                </a>
+
+                <hr class="mt-4">
+
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button class="nav-link" type="submit" style="border: none; background-color: transparent">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+                        Logout
+                    </button>
+                </form>
+                
+                
+            </div>
+        </div>
+        <div class="sb-sidenav-footer">
+            <div class="small">Versão:</div>
+            0.0.1
+        </div>
+    </nav>
+</div>

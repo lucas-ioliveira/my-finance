@@ -1,0 +1,43 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block title %} MyFinance | 404{% endblock title %}
+
+{% block style %}
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 50px;
+}
+h1 {
+    font-size: 48px;
+    color:rgb(246, 47, 11);
+}
+p {
+    font-size: 20px;
+}
+a {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 18px;
+}
+.container {
+    margin: 0 auto;
+}
+
+
+{% endblock style %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>404</h1>
+        <p>Página não encontrada!</p>
+        {% comment %} <igm src="{% static 'assets/img/error-404-monochrome.svg' %}" alt="404"> {% endcomment %}
+        <a href="{% url 'dashboard' %}">Clique aqui para voltar</a>
+    </div>
+
+
+{% endblock content %}
