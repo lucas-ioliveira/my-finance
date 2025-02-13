@@ -19,7 +19,7 @@ class ReportView(View):
         }
 
         model = request.GET.get('model')
-        import ipdb; ipdb.set_trace()
+        # import ipdb; ipdb.set_trace()
 
         if model == 'Expense':
 
