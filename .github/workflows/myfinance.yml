@@ -47,6 +47,9 @@ jobs:
       - name: Subir containers do Docker
         run: docker-compose up -d --build
 
+      - name: Rodar migrations
+        run: docker-compose exec -T web python manage.py makemigrations
+
       - name: Rodar migrações
         run: docker-compose exec -T web python manage.py migrate
 
