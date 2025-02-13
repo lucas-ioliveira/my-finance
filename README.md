@@ -18,7 +18,7 @@ O projeto consiste em um sistema para controle financeiro pessoal, é possível 
 ### Execução do sistema
 
 - Basta entrar no diretório do projeto e no terminal rodar o comando: python manage.py runserver ou docker compose -f docker-compose.yml up -d --build;
-- O servidor será executado e se acessar localhost:8000 acessará a página inicial do sistema onde poderá realizar o cadastro ou o login;
+- O servidor será executado e se acessar localhost:8006 acessará a página inicial do sistema onde poderá realizar o cadastro ou o login;
 
 ### Exemplo da execução
 
