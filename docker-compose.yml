@@ -1,0 +1,14 @@
+services:
+  myfinance_app:
+    container_name: myfinance_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - "8006:8006"
+    volumes:
+      - .:/app
+    env_file:
+      - envs/.env
+    command: ["/bin/bash", "-c", "python manage.py runserver 0.0.0.0:8006"]
