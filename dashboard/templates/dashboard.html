@@ -118,7 +118,7 @@
                                                     </td>
                                                     <td>{{ item.name }}</td>
                                                     <td>R$ {{ item.high|floatformat:2|intcomma }}</td>
-                                                    <td>{{ item.create_date}}</td>
+                                                    <td>{% now 'd/m/Y' %}</td>
                                                 </tr>
                                             {% endfor %}
                                         </tbody>
