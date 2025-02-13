@@ -35,11 +35,6 @@ jobs:
           echo "SECRET_KEY=supersecreta" >> .env
           echo "ALLOWED_HOSTS=127.0.0.1" >> .env
 
-      - name: Instalar Docker e Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker.io docker-compose
-
       - name: Subir containers do Docker
         run: docker-compose up -d --build
 
