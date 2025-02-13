@@ -35,14 +35,6 @@ jobs:
           echo "SECRET_KEY=supersecreta" >> .env
           echo "ALLOWED_HOSTS=127.0.0.1" >> .env
 
-      - name: Remover pacote containerd
-        run: sudo apt-get remove containerd
-
-      - name: Instalar Docker
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker.io
-
       - name: Baixar e Instalar Docker Compose
         run: |
           sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -51,15 +43,6 @@ jobs:
       - name: Adicionar Docker Compose ao PATH
         run: |
           export PATH=$PATH:/usr/local/bin
-
-      - name: Verificar Instalação do Docker Compose
-        run: docker-compose --version
-
-      - name: Iniciar Docker
-        run: sudo service docker start
-
-      - name: Verificar Status do Docker
-        run: sudo systemctl status docker
 
       - name: Subir containers do Docker
         run: docker-compose up -d --build
