@@ -59,11 +59,21 @@ class RevenueView(View):
     def get(self, request):
         categorias = Category.objects.all().filter(user=request.user, active=True)
         status = Revenue.STATUS_CHOICES
-        revenue = Revenue.objects.all().filter(user=request.user, active=True)
+        revenue = Revenue.objects.filter(user=request.user, active=True)
+        
         if request.GET.get('search'):
             search = request.GET.get('search')
-            revenue = Revenue.objects.filter(user=request.user, active=True).filter(description__icontains=search)
+            revenue = revenue.filter(description__icontains=search)
         
+        date_filter = request.GET.get('date_filter')
+        if date_filter:
+            filter_type = request.GET.get('filter_type')
+            initial_date = request.GET.get('initial_date')
+            final_date = request.GET.get('final_date')
+
+            if filter_type == 'payment_date' and initial_date and final_date:
+                revenue = revenue.filter(payment_date__range=[initial_date, final_date])
+
         paginator = Paginator(revenue, 6)
         page = request.GET.get('page')
         revenue = paginator.get_page(page)
@@ -145,22 +155,35 @@ class RevenueCloneView(View):
 @method_decorator(login_required, name='dispatch')
 class ExpenseView(View):
     def get(self, request):
-        categorias = Category.objects.all().filter(user=request.user, active=True)
+        categorias = Category.objects.filter(user=request.user, active=True)
         status = Expense.STATUS_CHOICES
         expense = Expense.objects.filter(user=request.user, active=True)
 
-        if request.GET.get('search'):
-            search = request.GET.get('search')
-            expense = Expense.objects.filter(user=request.user, active=True).filter(description__icontains=search)
-        
+        search = request.GET.get('search')
+        if search:
+            expense = expense.filter(description__icontains=search)
+
+        date_filter = request.GET.get('date_filter')
+        if date_filter:
+            filter_type = request.GET.get('filter_type')
+            initial_date = request.GET.get('initial_date')
+            final_date = request.GET.get('final_date')
+
+            if filter_type == 'payment_date' and initial_date and final_date:
+                expense = expense.filter(payment_date__range=[initial_date, final_date])
+            elif filter_type == 'due_date' and initial_date and final_date:
+                expense = expense.filter(due_date__range=[initial_date, final_date])
+            elif filter_type == 'todos' and initial_date and final_date:
+                expense = expense.filter(payment_date__range=[initial_date, final_date], due_date__range=[initial_date, final_date])
+
         paginator = Paginator(expense, 6)
         page = request.GET.get('page')
         expense = paginator.get_page(page)
-        
+
         context = {
             'expense': expense,
             'status': status,
-            'categorias': categorias
+            'categorias': categorias,
         }
         return render(request, 'expense.html', context)
     
@@ -249,11 +272,20 @@ class InvestmentsView(View):
     def get(self, request):
         categorias = Category.objects.all().filter(user=request.user, active=True)
         status = Investments.STATUS_CHOICES
-        investments = Investments.objects.all().filter(user=request.user, active=True)
+        investments = Investments.objects.filter(user=request.user, active=True)
         
         if request.GET.get('search'):
             search = request.GET.get('search')
-            investments = Investments.objects.filter(user=request.user, active=True).filter(description__icontains=search)
+            investments = investments.filter(description__icontains=search)
+        
+        date_filter = request.GET.get('date_filter')
+        if date_filter:
+            filter_type = request.GET.get('filter_type')
+            initial_date = request.GET.get('initial_date')
+            final_date = request.GET.get('final_date')
+
+            if filter_type == 'investment_date' and initial_date and final_date:
+                investments = investments.filter(investment_date__range=[initial_date, final_date])
         
         paginator = Paginator(investments, 6)
         page = request.GET.get('page')
@@ -328,7 +360,6 @@ class InvestmentsEditView(View):
 @method_decorator(login_required, name='dispatch')
 class InvestmentsDeleteView(View):
     def post(self, request, investments_id):
-        # import ipdb; ipdb.set_trace()
         investments = get_object_or_404(Investments, id=investments_id)
         investments.active = False
         investments.save()

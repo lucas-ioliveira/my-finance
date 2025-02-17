@@ -36,16 +36,28 @@
                         <div class="card shadow-sm">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <div>
-                                <i class="fas fa-table me-1"></i>
-                                Lista de entradas
+                                    <i class="fas fa-table me-1"></i>
+                                    Lista de entradas
                                 </div>
+
                                 <div>
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalAddReceita" title="Adicionar"> 
-                                    <i class="fa-solid fa-plus"></i>
-                                </button>
-                                <button class="btn btn-primary btn-sm" type="submit" data-toggle="modal" data-target="#modalExportarReceita" title="Exportar"><i class="fa-solid fa-download"></i></i></button>
+
+                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalAddReceita" title="Adicionar"> 
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                
+                                    <button class="btn btn-primary btn-sm" type="submit" data-toggle="modal" data-target="#modalExportarReceita" title="Exportar">
+                                        <i class="fa-solid fa-download"></i>
+                                    </button>
+
+                                    <button class="btn btn-primary btn-sm" type="submit" data-toggle="modal" data-target="#modalFiltroDatas" title="Filtrar">
+                                        <i class="fa-solid fa-filter"></i>
+                                    </button>
+
                                 </div>
+
                             </div>
+                            
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped mt-3">
@@ -364,6 +376,52 @@
                                 <input type="hidden" name="model" value="Revenue">
                               
                               
+                                <div class="modal-footer" style="margin-top:60px;">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                    <button type="submit" class="btn btn-primary">Salvar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="modalFiltroDatas" tabindex="-1" role="dialog" aria-labelledby="labelmodalFiltroDatas" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Filtrar receitas</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form  id="formEditReceita" method="GET" action="{% url 'revenue' %}">
+                                {% csrf_token %}
+
+                                <div class="row mb-2">
+                                
+                                    <div class="col-md-12">
+                                        <label for="medico" class="form-label">Filtar por</label>
+                                        <select class="form-select" id="filter_type" name="filter_type">
+                                            <option value="payment_date">Data de Pagamento</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Data inicial</label>
+                                        <input type="date" placeholder="Digite o valor" class="form-control"  id="initial_date" name="initial_date" required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="medico" class="form-label">Data final</label>
+                                        <input type="date" placeholder="Digite o valor" class="form-control"  id="final_date" name="final_date" required>
+                                    </div>
+
+                                    <input type="hidden" name="date_filter" value="true">
+
+                                </div>
+
                                 <div class="modal-footer" style="margin-top:60px;">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                                     <button type="submit" class="btn btn-primary">Salvar</button>
