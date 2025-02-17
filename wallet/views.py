@@ -5,6 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.core.paginator import Paginator
 
+from datetime import datetime
+
+from dateutil.relativedelta import relativedelta
+
 from wallet.models import Category, Expense, Revenue, Investments
 
 @method_decorator(login_required, name='dispatch')
@@ -192,26 +196,57 @@ class ExpenseView(View):
         user = request.user
         description = request.POST.get('descricao')
         notes = request.POST.get('observacao')
-        amount = request.POST.get('valor')
-        amount = float(amount.replace(',', '.'))
-        category = request.POST.get('categoria')
+        category_id = request.POST.get('categoria')
+        payment_method = request.POST.get('forma_pagamento')
+        receipt = request.FILES.get('file')
 
-        if request.POST.get('data_pagamento'):
-            payment_date = request.POST.get('data_pagamento')
+        # Tratamento do valor
+        try:
+            amount = float(request.POST.get('valor').replace(',', '.'))
+        except (ValueError, AttributeError):
+            messages.error(request, "Valor inválido.")
+            return redirect('expense')
+
+        # Conversão de datas
+        try:
+            due_date = datetime.strptime(request.POST.get('data_vencimento'), "%Y-%m-%d").date()
+        except (ValueError, TypeError):
+            messages.error(request, "Data de vencimento inválida.")
+            return redirect('expense')
+
+        payment_date = request.POST.get('data_pagamento')
+        if payment_date:
+            try:
+                payment_date = datetime.strptime(payment_date, "%Y-%m-%d").date()
+            except ValueError:
+                messages.error(request, "Data de pagamento inválida.")
+                return redirect('expense')
         else:
             payment_date = None
 
-        due_date = request.POST.get('data_vencimento')
+        # Repetição
+        repeat = request.POST.get('repeat')
+        try:
+            repeat = int(repeat)
+        except (ValueError, TypeError):
+            repeat = 1 
 
+        for i in range(repeat):
+            expense = Expense(
+                user=user,
+                description=description,
+                notes=notes,
+                amount=amount,
+                category_id=category_id,
+                due_date=due_date,
+                payment_date=payment_date,
+                payment_method=payment_method,
+                receipt=receipt
+            )
+            expense.save()
+            due_date += relativedelta(months=1)
 
-        payment_method = request.POST.get('forma_pagamento')
-        receipt = request.FILES.get('file')
-        
-
-        expense = Expense(user=user, description=description, notes=notes, amount=amount, category_id=category, 
-                          due_date=due_date, payment_date=payment_date, payment_method=payment_method, receipt=receipt)
-        expense.save()
-        messages.success(request, "Despesa cadastrada com sucesso!")
+        messages.success(request, "Despesas cadastradas com sucesso!")
         return redirect('expense')
 
 
