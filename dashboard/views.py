@@ -26,6 +26,24 @@ class DashboardView(View):
             user=request.user, active=True, status='Realizado', investment_date__gte=data_limite
         ).aggregate(total_investments=Sum('amount'))['total_investments'] or 0
 
+        date_filter = request.GET.get('date_filter')
+        if date_filter:
+            initial_date = request.GET.get('initial_date')
+            final_date = request.GET.get('final_date')
+
+            revenues_total = Revenue.objects.filter(
+                user=request.user, active=True, status='Pago', payment_date__gte=initial_date, payment_date__lte=final_date
+            ).aggregate(total_revenues=Sum('amount'))['total_revenues'] or 0
+
+            expense_total = Expense.objects.filter(
+                user=request.user, active=True, due_date__gte=initial_date, due_date__lte=final_date
+            ).aggregate(total_expenses=Sum('amount'))['total_expenses'] or 0
+
+            investments_total = Investments.objects.filter(
+                user=request.user, active=True, status='Realizado', investment_date__gte=initial_date, investment_date__lte=final_date
+            ).aggregate(total_investments=Sum('amount'))['total_investments'] or 0
+
+
         balance = revenues_total - expense_total - investments_total
 
         recent_transactions = Dashboard.get_crud_events(request.user)
