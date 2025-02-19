@@ -6,13 +6,15 @@ COPY . /app
 
 EXPOSE 8006
 
-RUN apt-get update \
-&& apt-get install -y make \
-&& apt-get install -y pkg-config \
-&& apt-get install -y gcc \
-&& apt-get install -y default-libmysqlclient-dev \
-&& apt-get install -y python3-dev
+RUN apt-get update && \
+    apt-get install -y make pkg-config gcc default-libmysqlclient-dev python3-dev && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip
 RUN pip3 install -r requirements.txt
 RUN chmod -R 777 /app
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
