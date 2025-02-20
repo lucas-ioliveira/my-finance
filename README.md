@@ -26,23 +26,29 @@ O projeto consiste em um sistema para controle financeiro pessoal, é possível 
 
 - Home
 
-![Home](doc/img/home.png)
+![Home](docs/img/home.png)
 
 - Login
 
-![Home](doc/img/login.png)
+![Home](docs/img/login.png)
 
 - Cadastre-se
 
-![Home](doc/img/cadastro.png)
+![Home](docs/img/cadastro.png)
 
 #### Dashboard
 
 - Ao realizar o login, o usuário é redirecionado para o seu dashboard
 
-![Dashboard ](doc/img/logado.png)
+![Dashboard ](docs/img/logado.png)
 
-![Dashboard ](doc/img/dashboard.png)
+- Algumas informações relevantes são apresentadas, como o valor total de receitas, despesas, investimentos e o saldo (Equivalente a subtração das despesas e investimentos). Também conta com informações de câmbio, trazendo a cotação do dia das principais moedas e atividades recentes que são as ações do usuário no sistema.
+
+![Dashboard ](docs/img/dashboard.png)
+
+- No dashboard também conta com um filtro de períodos onde o usuário pode filtrar as datas que deseja e os cards com os valores serão atualizados de acordo com o filtro.
+
+![Modal de período ](docs/img/filtrar.png)
 
 #### Perfil
 
@@ -50,20 +56,20 @@ O projeto consiste em um sistema para controle financeiro pessoal, é possível 
 
 - Visualização geral do perfil
 
-![Perfil](doc/img/perfil.png)
+![Perfil](docs/img/perfil.png)
 
 - Alterar senha
 
-![Perfil - Alterar senha](doc/img/alterar_senha.png)
+![Perfil - Alterar senha](docs/img/alterar_senha.png)
 
 - Alterar informações pessoais
 
-![Perfil - Alterar info pessoais](doc/img/alterar_info_pessoal.png)
+![Perfil - Alterar info pessoais](docs/img/alterar_info_pessoal.png)
 
 - Alterar endereço
 - Obs: Ao alterar o endereço, basta digitar somente o cep que os demais campos serão preenchidos automáticamente. 
 
-![Perfil - Alterar endereço](doc/img/alterar_endereco.png)
+![Perfil - Alterar endereço](docs/img/alterar_endereco.png)
 
 
 #### Categorias
@@ -72,19 +78,19 @@ O projeto consiste em um sistema para controle financeiro pessoal, é possível 
 
 - Lista de categorias cadastradas
 
-![Categorias - lista](doc/img/categorias.png)
+![Categorias - lista](docs/img/categorias.png)
 
 - Adicionar categoria
 
-![Categorias - modal para adicionar](doc/img/add_categoria.png)
+![Categorias - modal para adicionar](docs/img/add_categoria.png)
 
 - Editar categoria
 
-![Categorias - modal para editar](doc/img/editar_categoria.png)
+![Categorias - modal para editar](docs/img/editar_categoria.png)
 
 - Excluir categoria
 
-![Categorias - alerta para excluir](doc/img/excluir_categoria.png)
+![Categorias - alerta para excluir](docs/img/excluir_categoria.png)
 
 
 #### Despesas
@@ -93,19 +99,19 @@ O projeto consiste em um sistema para controle financeiro pessoal, é possível 
 
 - Lista de despesas cadastradas
 
-![Despesas - lista](doc/img/despesa_lista.png)
+![Despesas - lista](docs/img/despesa_lista.png)
 
 - Adicionar despesas
 
-![Despesas - modal para adicionar](doc/img/add_despesa.png)
+![Despesas - modal para adicionar](docs/img/add_despesa.png)
 
 - Editar despesas
 
-![Despesas - modal para editar](doc/img/edit_despesa.png)
+![Despesas - modal para editar](docs/img/edit_despesa.png)
 
 - Excluir despesas
 
-![Despesas - alerta para excluir](doc/img/alerta_despesa.png)
+![Despesas - alerta para excluir](docs/img/alerta_despesa.png)
 
 
 #### Receitas
@@ -114,19 +120,19 @@ O projeto consiste em um sistema para controle financeiro pessoal, é possível 
 
 - Lista de receita cadastradas
 
-![Receita - lista](doc/img/receita_lista.png)
+![Receita - lista](docs/img/receita_lista.png)
 
 - Adicionar receita
 
-![Receita - modal para adicionar](doc/img/add_receita.png)
+![Receita - modal para adicionar](docs/img/add_receita.png)
 
 - Editar receita
 
-![Receita - modal para editar](doc/img/editar_receita.png)
+![Receita - modal para editar](docs/img/editar_receita.png)
 
 - Excluir receita
 
-![Receita - alerta para excluir](doc/img/alerta_receita.png)
+![Receita - alerta para excluir](docs/img/alerta_receita.png)
 
 
 #### Investimentos
@@ -135,19 +141,19 @@ O projeto consiste em um sistema para controle financeiro pessoal, é possível 
 
 - Lista de investimentos cadastradas
 
-![Investimentos - lista](doc/img/investimentos.png)
+![Investimentos - lista](docs/img/investimentos.png)
 
 - Adicionar investimentos
 
-![Investimentos - modal para adicionar](doc/img/add_investimento.png)
+![Investimentos - modal para adicionar](docs/img/add_investimento.png)
 
 - Editar investimentos
 
-![Investimentos - modal para editar](doc/img/editar_investimento.png)
+![Investimentos - modal para editar](docs/img/editar_investimento.png)
 
 - Excluir investimentos
 
-![Investimentos - alerta para excluir](doc/img/alerta_investimento.png)
+![Investimentos - alerta para excluir](docs/img/alerta_investimento.png)
 
 
 #### Relatórios
@@ -156,16 +162,26 @@ O projeto consiste em um sistema para controle financeiro pessoal, é possível 
 
 - Exportar Despesa
 
-![Investimentos - lista](doc/img/exportar_despesa.png)
+![Investimentos - lista](docs/img/exportar_despesa.png)
 
 - Exportar Receita
 
-![Investimentos - modal para adicionar](doc/img/exportar_receita.png)
+![Investimentos - modal para adicionar](docs/img/exportar_receita.png)
 
 - Exportar investimentos
 
-![Investimentos - modal para editar](doc/img/exportar_investimento.png)
+![Investimentos - modal para editar](docs/img/exportar_investimento.png)
 
+
+### Modelagem e arquitetura
+
+- Modelagem do banco de dados
+
+![Tabelas do banco](docs/img/modelagem.png)
+
+- schema
+
+![Tabelas do banco](docs/img/schema.png)
 
 
 
