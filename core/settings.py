@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'easyaudit',
     'bootstrap4',
+    'schema_graph',
     'accounts',
     'common',
     'home',
