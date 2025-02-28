@@ -29,11 +29,17 @@ class ReportView(View):
             if request.GET.get('categoria_exportar') != 'todos':
                 filters['category'] = request.GET.get('categoria_exportar')
             
-            if request.GET.get('data_vencimento_exportar'):
-                filters['due_date__icontains'] = request.GET.get('data_vencimento_exportar')
+            if request.GET.get('data_vencimento_exportar_inicial'):
+                filters['due_date__gte'] = request.GET.get('data_vencimento_exportar_inicial')
             
-            if request.GET.get('data_pagamento_exportar'):
-                filters['payment_date__icontains'] = request.GET.get('data_pagamento_exportar')
+            if request.GET.get('data_vencimento_exportar_final'):
+                filters['due_date__lte'] = request.GET.get('data_vencimento_exportar_final')
+            
+            if request.GET.get('data_pagamento_exportar_inicial'):
+                filters['payment_date__gte'] = request.GET.get('data_pagamento_exportar_inicial')
+            
+            if request.GET.get('data_pagamento_exportar_final'):
+                filters['payment_date__lte'] = request.GET.get('data_pagamento_exportar_final')
             
             if request.GET.get('forma_pagamento_exportar'):
                 filters['payment_method__icontains'] = request.GET.get('forma_pagamento_exportar')
