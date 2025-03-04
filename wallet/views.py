@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 from datetime import datetime
 
@@ -178,7 +179,10 @@ class ExpenseView(View):
             elif filter_type == 'due_date' and initial_date and final_date:
                 expense = expense.filter(due_date__range=[initial_date, final_date])
             elif filter_type == 'todos' and initial_date and final_date:
-                expense = expense.filter(payment_date__range=[initial_date, final_date], due_date__range=[initial_date, final_date])
+                expense = expense.filter(
+                    Q(payment_date__range=(initial_date, final_date)) |
+                    Q(due_date__range=(initial_date, final_date))
+                )
 
         paginator = Paginator(expense, 6)
         page = request.GET.get('page')
