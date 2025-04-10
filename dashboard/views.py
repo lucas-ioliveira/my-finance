@@ -10,11 +10,12 @@ import calendar
 from wallet.models import Revenue, Expense, Investments
 from dashboard.utils import Dashboard
 
+
 @method_decorator(login_required, name='dispatch')
 class DashboardView(View):
     def get(self, request):
         today = datetime.now().date()
-        
+
         # Obtendo o primeiro e último dia do mês corretamente
         first_day = today.replace(day=1)
         last_day = today.replace(day=calendar.monthrange(today.year, today.month)[1])
