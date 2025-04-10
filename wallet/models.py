@@ -25,7 +25,7 @@ class Revenue(Base):
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuário')
-    description = models.CharField(max_length=255, verbose_name='Descrição')  
+    description = models.CharField(max_length=255, verbose_name='Descrição')
     notes = models.TextField(blank=True, null=True, verbose_name='Observações')
     amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Valor')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, verbose_name='Categoria')
@@ -70,6 +70,7 @@ class Expense(Base):
     def __str__(self):
         return self.description
 
+
 class Investments(Base):
     STATUS_CHOICES = [
         ('Atrasado', 'Atrasado'),
@@ -95,4 +96,3 @@ class Investments(Base):
 
     def __str__(self):
         return self.description
-

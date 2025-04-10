@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 from wallet.models import Revenue, Category
 
+
 class RevenueModelTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='testpassword')
@@ -30,10 +31,10 @@ class RevenueModelTest(TestCase):
             created_at=timezone.now(),
             updated_at=timezone.now()
         )
-    
+
     def test_revenue_creation(self):
         revenue = Revenue.objects.get(user=self.user)
-        
+
         self.assertEqual(revenue.user, self.user)
         self.assertEqual(revenue.description, 'Test Rescription')
         self.assertEqual(revenue.notes, 'Test Notes')
@@ -43,6 +44,6 @@ class RevenueModelTest(TestCase):
         self.assertEqual(revenue.payment_method, 'Test Method')
         self.assertEqual(revenue.status, 'Pendente')
         self.assertTrue(revenue.active)
-    
+
     def test_revenue_count(self):
         self.assertEqual(Revenue.objects.count(), 1)

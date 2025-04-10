@@ -12,6 +12,7 @@ from dateutil.relativedelta import relativedelta
 
 from wallet.models import Category, Expense, Revenue, Investments
 
+
 @method_decorator(login_required, name='dispatch')
 class CategoryView(View):
     def get(self, request):
@@ -19,13 +20,13 @@ class CategoryView(View):
         if request.GET.get('search'):
             search = request.GET.get('search')
             categories = Category.objects.filter(user=request.user, active=True).filter(name__icontains=search)
-        
+
         paginator = Paginator(categories, 6)
         page = request.GET.get('page')
         categories = paginator.get_page(page)
-        
+
         return render(request, 'wallet/category.html', {'categories': categories})
-    
+
     def post(self, request):
         user = request.user
         name = request.POST.get('name')
@@ -48,28 +49,28 @@ class CategoryEditView(View):
         messages.success(request, "Categoria atualizada com sucesso!")
         return redirect('category')
 
+
 @method_decorator(login_required, name='dispatch')
 class CategoryDeleteView(View):
     def post(self, request, category_id):
-        # import ipdb; ipdb.set_trace()
         category = get_object_or_404(Category, id=category_id)
         category.active = False
         category.save()
         messages.success(request, "Categoria removida com sucesso!")
         return redirect('category')
 
-#Receitas
+
 @method_decorator(login_required, name='dispatch')
 class RevenueView(View):
     def get(self, request):
         categorias = Category.objects.all().filter(user=request.user, active=True)
         status = Revenue.STATUS_CHOICES
         revenue = Revenue.objects.filter(user=request.user, active=True)
-        
+
         if request.GET.get('search'):
             search = request.GET.get('search')
             revenue = revenue.filter(description__icontains=search)
-        
+
         date_filter = request.GET.get('date_filter')
         if date_filter:
             filter_type = request.GET.get('filter_type')
@@ -82,14 +83,14 @@ class RevenueView(View):
         paginator = Paginator(revenue, 6)
         page = request.GET.get('page')
         revenue = paginator.get_page(page)
-        
+
         context = {
             'revenue': revenue,
             'status': status,
             'categorias': categorias
         }
         return render(request, 'wallet/revenue.html', context)
-    
+
     def post(self, request):
         user = request.user
         description = request.POST.get('descricao')
@@ -100,10 +101,11 @@ class RevenueView(View):
         payment_date = request.POST.get('data_pagamento')
         payment_method = request.POST.get('forma_pagamento')
         receipt = request.FILES.get('file')
-        # import ipdb; ipdb.set_trace()
 
-        revenue = Revenue(user=user, description=description, notes=notes, amount=amount, category_id=category, 
-                          payment_date=payment_date, payment_method=payment_method, receipt=receipt)
+        revenue = Revenue(
+            user=user, description=description, notes=notes, amount=amount, category_id=category,
+            payment_date=payment_date, payment_method=payment_method, receipt=receipt
+        )
         revenue.save()
         messages.success(request, "Receita cadastrada com sucesso!")
         return redirect('revenue')
@@ -134,7 +136,7 @@ class RevenueEditView(View):
         revenue.save()
         messages.success(request, "Receita atualizada com sucesso!")
         return redirect('revenue')
-    
+
 
 @method_decorator(login_required, name='dispatch')
 class RevenueDeleteView(View):
@@ -145,6 +147,7 @@ class RevenueDeleteView(View):
         revenue.save()
         messages.success(request, "Receita removida com sucesso!")
         return redirect('revenue')
+
 
 @method_decorator(login_required, name='dispatch')
 class RevenueCloneView(View):
@@ -180,8 +183,7 @@ class ExpenseView(View):
                 expense = expense.filter(due_date__range=[initial_date, final_date])
             elif filter_type == 'todos' and initial_date and final_date:
                 expense = expense.filter(
-                    Q(payment_date__range=(initial_date, final_date)) |
-                    Q(due_date__range=(initial_date, final_date))
+                    Q(payment_date__range=(initial_date, final_date)) | Q(due_date__range=(initial_date, final_date))
                 )
 
         paginator = Paginator(expense, 6)
@@ -194,7 +196,7 @@ class ExpenseView(View):
             'categorias': categorias,
         }
         return render(request, 'wallet/expense.html', context)
-    
+
     def post(self, request):
         # import ipdb; ipdb.set_trace()
         user = request.user
@@ -233,7 +235,7 @@ class ExpenseView(View):
         try:
             repeat = int(repeat)
         except (ValueError, TypeError):
-            repeat = 1 
+            repeat = 1
 
         for i in range(repeat):
             expense = Expense(
@@ -284,7 +286,7 @@ class ExpenseEditView(View):
         expense.save()
         messages.success(request, "Despesa atualizada com sucesso!")
         return redirect('expense')
-    
+
 
 @method_decorator(login_required, name='dispatch')
 class ExpenseDeleteView(View):
@@ -296,6 +298,7 @@ class ExpenseDeleteView(View):
         messages.success(request, "Despesa removida com sucesso!")
         return redirect('expense')
 
+
 @method_decorator(login_required, name='dispatch')
 class ExpenseCloneView(View):
     def post(self, request, expense_id):
@@ -305,18 +308,18 @@ class ExpenseCloneView(View):
         messages.success(request, "Despesa clonada com sucesso!")
         return redirect('expense')
 
-# Investimentos
+
 @method_decorator(login_required, name='dispatch')
 class InvestmentsView(View):
     def get(self, request):
         categorias = Category.objects.all().filter(user=request.user, active=True)
         status = Investments.STATUS_CHOICES
         investments = Investments.objects.filter(user=request.user, active=True)
-        
+
         if request.GET.get('search'):
             search = request.GET.get('search')
             investments = investments.filter(description__icontains=search)
-        
+
         date_filter = request.GET.get('date_filter')
         if date_filter:
             filter_type = request.GET.get('filter_type')
@@ -325,19 +328,18 @@ class InvestmentsView(View):
 
             if filter_type == 'investment_date' and initial_date and final_date:
                 investments = investments.filter(investment_date__range=[initial_date, final_date])
-        
+
         paginator = Paginator(investments, 6)
         page = request.GET.get('page')
         investments = paginator.get_page(page)
-        
-        
+
         context = {
             'investments': investments,
             'status': status,
             'categorias': categorias
         }
         return render(request, 'wallet/investments.html', context)
-    
+
     def post(self, request):
         # import ipdb; ipdb.set_trace()
         user = request.user
@@ -354,9 +356,11 @@ class InvestmentsView(View):
 
         investment_method = request.POST.get('metodo_investimento')
         receipt = request.FILES.get('file')
-        
-        expense = Investments(user=user, description=description, notes=notes, amount=amount, category_id=category, 
-                          investment_date=investment_date, investment_method=investment_method, receipt=receipt)
+
+        expense = Investments(
+            user=user, description=description, notes=notes, amount=amount, category_id=category,
+            investment_date=investment_date, investment_method=investment_method, receipt=receipt
+        )
         expense.save()
         messages.success(request, "Investimento cadastrada com sucesso!")
         return redirect('investments')
@@ -394,7 +398,7 @@ class InvestmentsEditView(View):
         investments.save()
         messages.success(request, "Investimento atualizado com sucesso!")
         return redirect('investments')
-    
+
 
 @method_decorator(login_required, name='dispatch')
 class InvestmentsDeleteView(View):
@@ -404,6 +408,7 @@ class InvestmentsDeleteView(View):
         investments.save()
         messages.success(request, "Investimento removido com sucesso!")
         return redirect('investments')
+
 
 @method_decorator(login_required, name='dispatch')
 class InvestmentsCloneView(View):
