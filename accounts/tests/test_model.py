@@ -25,7 +25,7 @@ class ContactDetailsModelTest(TestCase):
 
     def test_contact_details_creation(self):
         contact_details = ContactDetails.objects.get(user=self.user)
-        
+
         self.assertEqual(contact_details.user, self.user)
         self.assertEqual(contact_details.cep, '12345678')
         self.assertEqual(contact_details.address, 'Rua Teste')

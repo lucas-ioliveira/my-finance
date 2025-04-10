@@ -7,8 +7,10 @@ from wallet.models import Expense, Revenue, Investments
 
 import openpyxl
 
+
 def custom_404(request, exception):
     return render(request, '404.html', status=404)
+
 
 class ReportView(View):
     def get(self, request):
@@ -19,31 +21,30 @@ class ReportView(View):
         }
 
         model = request.GET.get('model')
-        # import ipdb; ipdb.set_trace()
 
         if model == 'Expense':
 
             if request.GET.get('status_exportar') != 'todos':
                 filters['status'] = request.GET.get('status_exportar')
-            
+
             if request.GET.get('categoria_exportar') != 'todos':
                 filters['category'] = request.GET.get('categoria_exportar')
-            
+
             if request.GET.get('data_vencimento_exportar_inicial'):
                 filters['due_date__gte'] = request.GET.get('data_vencimento_exportar_inicial')
-            
+
             if request.GET.get('data_vencimento_exportar_final'):
                 filters['due_date__lte'] = request.GET.get('data_vencimento_exportar_final')
-            
+
             if request.GET.get('data_pagamento_exportar_inicial'):
                 filters['payment_date__gte'] = request.GET.get('data_pagamento_exportar_inicial')
-            
+
             if request.GET.get('data_pagamento_exportar_final'):
                 filters['payment_date__lte'] = request.GET.get('data_pagamento_exportar_final')
-            
+
             if request.GET.get('forma_pagamento_exportar'):
                 filters['payment_method__icontains'] = request.GET.get('forma_pagamento_exportar')
-            
+
             headers = ['título', 'observação', 'valor', 'categoria', 'data de pagamento', 'método de pagamento', 'status', 'data de vencimento']
 
             expense = Expense.objects.filter(**filters)
@@ -70,24 +71,24 @@ class ReportView(View):
             except Exception as e:
                 messages.error(request, f"Erro ao gerar o arquivo: {str(e)}")
                 return redirect('expense')
-        
+
         if model == 'Revenue':
 
             if request.GET.get('status_exportar') != 'todos':
                 filters['status'] = request.GET.get('status_exportar')
-            
+
             if request.GET.get('categoria_exportar') != 'todos':
                 filters['category'] = request.GET.get('categoria_exportar')
-    
+
             if request.GET.get('data_pagamento_exportar_inicial'):
                 filters['payment_date__gte'] = request.GET.get('data_pagamento_exportar_inicial')
-            
+
             if request.GET.get('data_pagamento_exportar_final'):
                 filters['payment_date__lte'] = request.GET.get('data_pagamento_exportar_final')
-            
+
             if request.GET.get('forma_pagamento_exportar'):
                 filters['payment_method__icontains'] = request.GET.get('forma_pagamento_exportar')
-            
+
             headers = ['título', 'observação', 'valor', 'categoria', 'data de pagamento', 'método de pagamento', 'status']
 
             revenue = Revenue.objects.filter(**filters)
@@ -114,24 +115,24 @@ class ReportView(View):
             except Exception as e:
                 messages.error(request, f"Erro ao gerar o arquivo: {str(e)}")
                 return redirect('revenue')
-        
+
         if model == 'Investments':
 
             if request.GET.get('status_exportar') != 'todos':
                 filters['status'] = request.GET.get('status_exportar')
-            
+
             if request.GET.get('categoria_exportar') != 'todos':
                 filters['category'] = request.GET.get('categoria_exportar')
-    
+
             if request.GET.get('data_investimento_exportar_inicial'):
                 filters['investment_date__gte'] = request.GET.get('data_investimento_exportar_inicial')
-            
+
             if request.GET.get('data_investimento_exportar_final'):
                 filters['investment_date__lte'] = request.GET.get('data_investimento_exportar_final')
-            
+
             if request.GET.get('forma_pagamento_exportar'):
                 filters['investment_method__icontains'] = request.GET.get('forma_pagamento_exportar')
-            
+
             headers = ['título', 'observação', 'valor', 'categoria', 'data do investimento', 'método de investimento', 'status']
 
             investments = Investments.objects.filter(**filters)
@@ -158,8 +159,7 @@ class ReportView(View):
             except Exception as e:
                 messages.error(request, f"Erro ao gerar o arquivo: {str(e)}")
                 return redirect('investments')
-            
+
         else:
             messages.error(request, "Erro ao gerar o arquivo!")
             return redirect('investments')
-        
