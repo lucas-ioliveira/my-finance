@@ -24,7 +24,7 @@ class CategoryView(View):
         page = request.GET.get('page')
         categories = paginator.get_page(page)
         
-        return render(request, 'category.html', {'categories': categories})
+        return render(request, 'wallet/category.html', {'categories': categories})
     
     def post(self, request):
         user = request.user
@@ -88,7 +88,7 @@ class RevenueView(View):
             'status': status,
             'categorias': categorias
         }
-        return render(request, 'revenue.html', context)
+        return render(request, 'wallet/revenue.html', context)
     
     def post(self, request):
         user = request.user
@@ -193,7 +193,7 @@ class ExpenseView(View):
             'status': status,
             'categorias': categorias,
         }
-        return render(request, 'expense.html', context)
+        return render(request, 'wallet/expense.html', context)
     
     def post(self, request):
         # import ipdb; ipdb.set_trace()
@@ -336,7 +336,7 @@ class InvestmentsView(View):
             'status': status,
             'categorias': categorias
         }
-        return render(request, 'investments.html', context)
+        return render(request, 'wallet/investments.html', context)
     
     def post(self, request):
         # import ipdb; ipdb.set_trace()

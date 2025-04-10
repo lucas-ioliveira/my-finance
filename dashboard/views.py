@@ -57,7 +57,7 @@ class DashboardView(View):
         balance = revenues_total - expense_total - investments_total
 
         recent_transactions = Dashboard.get_crud_events(request.user)
-        exchange_rates = Dashboard.get_exchange_rates()
+        # exchange_rates = Dashboard.get_exchange_rates()
 
         context = {
             'revenues_total': revenues_total,
@@ -65,6 +65,6 @@ class DashboardView(View):
             'investments_total': investments_total,
             'balance': balance,
             'recent_transactions': recent_transactions,
-            'exchange_rates': exchange_rates,
+            # 'exchange_rates': exchange_rates,
         }
-        return render(request, 'dashboard.html', context)
+        return render(request, 'dashboard/dashboard.html', context)
