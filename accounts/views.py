@@ -15,7 +15,7 @@ from accounts.utils import Accounts
 
 
 class CustomLoginView(LoginView):
-    template_name = 'login.html'
+    template_name = 'accounts/login.html'
     success_url = reverse_lazy('dashboard')
 
     def form_valid(self, form):
@@ -25,7 +25,7 @@ class CustomLoginView(LoginView):
     
 class RegisterUserView(CreateView):
     form_class = CustomUserCreationForm
-    template_name = 'register.html' 
+    template_name = 'accounts/register.html' 
     success_url = reverse_lazy('login')
 
 class CustomLogoutView(LogoutView):
@@ -34,7 +34,7 @@ class CustomLogoutView(LogoutView):
 
 method_decorator(login_required, name='dispatch')
 class CustomPasswordChangeView(PasswordChangeView):
-    template_name = 'profile.html' 
+    template_name = 'accounts/profile.html' 
     success_url = reverse_lazy('profile') 
     
     def form_valid(self, form):
@@ -63,7 +63,7 @@ class ProfileView(View):
             'info_pessoais': info_pessoais,
             'info_contato': info_contato if info_contato else None
         }
-        return render(request, 'profile.html', context)
+        return render(request, 'accounts/profile.html', context)
     
     def post(self, request):
         user = request.user
