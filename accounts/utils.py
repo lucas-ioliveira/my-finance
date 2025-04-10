@@ -3,12 +3,13 @@ import re
 
 from accounts.models import ContactDetails
 
+
 class Accounts:
     @staticmethod
     def get_cep_info(cep):
         url = f'https://cep.awesomeapi.com.br/json/{cep}'
         response = requests.get(url, timeout=5)
-        
+
         if response.status_code == 200:
             data = response.json()
             address_dict = {
@@ -22,7 +23,6 @@ class Accounts:
             return address_dict
         else:
             raise Exception(f"Erro externo: {response.status_code} - {response.text}")
-
 
     @staticmethod
     def atualizar_info_contato(user, data_post):
@@ -49,5 +49,3 @@ class Accounts:
             return ContactDetails.objects.filter(user=user).update(**contato)
         else:
             return ContactDetails.objects.create(user=user, **contato)
-
-

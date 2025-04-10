@@ -22,26 +22,34 @@ class CustomLoginView(LoginView):
         # Mensagem de sucesso após login
         messages.success(self.request, "Bem-vindo!")
         return super().form_valid(form)
-    
+
+
 class RegisterUserView(CreateView):
     form_class = CustomUserCreationForm
-    template_name = 'accounts/register.html' 
+    template_name = 'accounts/register.html'
     success_url = reverse_lazy('login')
+
 
 class CustomLogoutView(LogoutView):
     def get(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
 
+
 method_decorator(login_required, name='dispatch')
+
+
 class CustomPasswordChangeView(PasswordChangeView):
-    template_name = 'accounts/profile.html' 
-    success_url = reverse_lazy('profile') 
-    
+    template_name = 'accounts/profile.html'
+    success_url = reverse_lazy('profile')
+
     def form_valid(self, form):
         messages.success(self.request, "Sua senha foi alterada com sucesso!")
         return super().form_valid(form)
 
+
 method_decorator(login_required, name='dispatch')
+
+
 class EnderecoView(View):
     def get(self, request):
         cep = request.GET.get("cep")
@@ -53,6 +61,8 @@ class EnderecoView(View):
 
 
 method_decorator(login_required, name='dispatch')
+
+
 class ProfileView(View):
     def get(self, request):
         user = request.user
@@ -64,7 +74,7 @@ class ProfileView(View):
             'info_contato': info_contato if info_contato else None
         }
         return render(request, 'accounts/profile.html', context)
-    
+
     def post(self, request):
         user = request.user
         previous_page = request.META.get("HTTP_REFERER")
@@ -73,7 +83,7 @@ class ProfileView(View):
             nome = request.POST.get('nome', user.first_name)
             sobrenome = request.POST.get('sobrenome', user.last_name)
             email = request.POST.get('email', user.email)
-            
+
             user.first_name = nome
             user.last_name = sobrenome
             user.email = email

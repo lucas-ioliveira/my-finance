@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 from common.models import Base
+
 
 class ContactDetails(Base):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuário')
@@ -18,5 +20,5 @@ class ContactDetails(Base):
         verbose_name = 'Detalhes de Contato'
         verbose_name_plural = 'Detalhes de Contato'
 
-    def __str__(self):  
+    def __str__(self):
         return f'{self.address}'
