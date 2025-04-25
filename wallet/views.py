@@ -9,55 +9,52 @@ from django.db.models import Q
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
-
+from common.services.wallet.category_services import CategoryService
 from wallet.models import Category, Expense, Revenue, Investments
 
 
 @method_decorator(login_required, name='dispatch')
 class CategoryView(View):
     def get(self, request):
-        categories = Category.objects.all().filter(user=request.user, active=True)
-        if request.GET.get('search'):
-            search = request.GET.get('search')
-            categories = Category.objects.filter(user=request.user, active=True).filter(name__icontains=search)
-
-        paginator = Paginator(categories, 6)
-        page = request.GET.get('page')
-        categories = paginator.get_page(page)
-
-        return render(request, 'wallet/category.html', {'categories': categories})
+        try:
+            categories = CategoryService.get_all(request)
+            return render(request, 'wallet/category.html', {'categories': categories})
+        except Exception:
+            messages.error(request, "Erro ao listar categorias!")
+            return redirect('dashboard')
 
     def post(self, request):
-        user = request.user
-        name = request.POST.get('name')
-        description = request.POST.get('description')
-        category = Category(user=user, name=name, description=description)
-        category.save()
-        messages.success(request, "Categoria cadastrada com sucesso!")
-        return redirect('category')
+        try:
+            CategoryService.create(request)
+            messages.success(request, "Categoria cadastrada com sucesso!")
+            return redirect('category')
+        except Exception:
+            messages.error(request, "Erro ao cadastrar categoria!")
+            return redirect('category')
 
 
 @method_decorator(login_required, name='dispatch')
 class CategoryEditView(View):
     def post(self, request, category_id):
-        name = request.POST.get('name_edit')
-        description = request.POST.get('description_edit')
-        category = get_object_or_404(Category, id=category_id)
-        category.name = name
-        category.description = description
-        category.save()
-        messages.success(request, "Categoria atualizada com sucesso!")
-        return redirect('category')
+        try:
+            CategoryService.update(request, category_id)
+            messages.success(request, "Categoria atualizada com sucesso!")
+            return redirect('category')
+        except Exception:
+            messages.error(request, "Erro ao atualizar categoria!")
+            return redirect('category')
 
 
 @method_decorator(login_required, name='dispatch')
 class CategoryDeleteView(View):
     def post(self, request, category_id):
-        category = get_object_or_404(Category, id=category_id)
-        category.active = False
-        category.save()
-        messages.success(request, "Categoria removida com sucesso!")
-        return redirect('category')
+        try:
+            CategoryService.delete(category_id)
+            messages.success(request, "Categoria removida com sucesso!")
+            return redirect('category')
+        except Exception:
+            messages.error(request, "Erro ao remover categoria!")
+            return redirect('category')
 
 
 @method_decorator(login_required, name='dispatch')

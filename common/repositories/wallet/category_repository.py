@@ -1,27 +1,35 @@
 from django.shortcuts import get_object_or_404
 
-from common.repositories.base.base_repository import BaseRepository
 from wallet.models import Category
 
 
-class CategoryRepository(BaseRepository):
-    def __init__(self):
-        super().__init__(Category)
+class CategoryRepository:
 
-    def create(self, user, name, description):
-        self.model.objects.create(
+    @staticmethod
+    def get_all(user):
+        return Category.objects.all().filter(user=user, active=True)
+
+    @staticmethod
+    def get_all_by_search(user, search):
+        return Category.objects.all().filter(user=user, active=True).filter(name__icontains=search)
+
+    @staticmethod
+    def create(user, name, description):
+        Category.objects.create(
             user=user,
             name=name,
             description=description
         )
 
-    def update(self, category_id, name, description):
+    @staticmethod
+    def update(category_id, name, description):
         category = get_object_or_404(Category, id=category_id)
         category.name = name
         category.description = description
         category.save()
 
-    def delete(self, category_id, active):
+    @staticmethod
+    def delete(category_id, active):
         category = get_object_or_404(Category, id=category_id)
         category.active = active
         category.save()
