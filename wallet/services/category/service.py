@@ -1,6 +1,6 @@
 from django.core.paginator import Paginator
 
-from common.repositories.wallet.category.repository import CategoryRepository
+from wallet.repositories.category.repository import CategoryRepository
 
 
 class CategoryService:

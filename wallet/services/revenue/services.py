@@ -1,6 +1,6 @@
 from django.core.paginator import Paginator
 
-from common.repositories.wallet.revanue.repository import RevenueRepository
+from wallet.repositories.revanue.repository import RevenueRepository
 
 
 class RevenueService:

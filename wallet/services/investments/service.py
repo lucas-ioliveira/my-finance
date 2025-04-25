@@ -1,6 +1,6 @@
 from django.core.paginator import Paginator
 
-from common.repositories.wallet.investments.repository import InvestmentsRepository
+from wallet.repositories.investments.repository import InvestmentsRepository
 
 
 class InvestmentsService:

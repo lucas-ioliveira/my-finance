@@ -4,17 +4,17 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
-from common.services.wallet.category.services import CategoryService
-from common.repositories.wallet.category.repository import CategoryRepository
+from wallet.services.category.service import CategoryService
+from wallet.repositories.category.repository import CategoryRepository
 
-from common.services.wallet.expense.services import ExpenseService
-from common.repositories.wallet.expense.repository import ExpenseRepository
+from wallet.services.expense.service import ExpenseService
+from wallet.repositories.expense.repository import ExpenseRepository
 
-from common.services.wallet.investments.services import InvestmentsService
-from common.repositories.wallet.investments.repository import InvestmentsRepository
+from wallet.services.investments.service import InvestmentsService
+from wallet.repositories.investments.repository import InvestmentsRepository
 
-from common.services.wallet.revenue.services import RevenueService
-from common.repositories.wallet.revanue.repository import RevenueRepository
+from wallet.services.revenue.services import RevenueService
+from wallet.repositories.revanue.repository import RevenueRepository
 
 
 @method_decorator(login_required, name='dispatch')

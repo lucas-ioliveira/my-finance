@@ -2,7 +2,7 @@ from django.core.paginator import Paginator
 
 from datetime import datetime
 
-from common.repositories.wallet.expense.repository import ExpenseRepository
+from wallet.repositories.expense.repository import ExpenseRepository
 
 
 class ExpenseService:
