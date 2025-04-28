@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.db.models import Sum
 
 from wallet.models import Revenue
 
@@ -53,3 +54,10 @@ class RevenueRepository:
         revenue = get_object_or_404(Revenue, id=revenue_id)
         revenue.pk = None
         revenue.save()
+
+    @staticmethod
+    def get_total_value(user, first_day, last_day):
+        return Revenue.objects.filter(
+            user=user, active=True, status='Pago',
+            payment_date__gte=first_day, payment_date__lte=last_day
+        ).aggregate(total_revenues=Sum('amount'))['total_revenues'] or 0

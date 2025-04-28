@@ -1,5 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from django.db.models import Sum
+
 
 from dateutil.relativedelta import relativedelta
 
@@ -77,3 +79,10 @@ class ExpenseRepository:
         expense = get_object_or_404(Expense, id=expense_id)
         expense.pk = None
         expense.save()
+
+    @staticmethod
+    def get_total_value(user, first_day, last_day):
+        return Expense.objects.filter(
+            user=user, active=True,
+            due_date__gte=first_day, due_date__lte=last_day
+        ).aggregate(total_expenses=Sum('amount'))['total_expenses'] or 0

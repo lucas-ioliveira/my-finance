@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.db.models import Sum
 
 from wallet.models import Investments
 
@@ -54,3 +55,10 @@ class InvestmentsRepository:
         investments = get_object_or_404(Investments, id=investments_id)
         investments.pk = None
         investments.save()
+
+    @staticmethod
+    def get_total_value(user, first_day, last_day):
+        return Investments.objects.filter(
+            user=user, active=True, status='Realizado',
+            investment_date__gte=first_day, investment_date__lte=last_day
+        ).aggregate(total_investments=Sum('amount'))['total_investments'] or 0
