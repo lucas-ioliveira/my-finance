@@ -86,3 +86,7 @@ class ExpenseRepository:
             user=user, active=True,
             due_date__gte=first_day, due_date__lte=last_day
         ).aggregate(total_expenses=Sum('amount'))['total_expenses'] or 0
+
+    @staticmethod
+    def get_by_filters_for_the_report(**filters):
+        return Expense.objects.filter(**filters)

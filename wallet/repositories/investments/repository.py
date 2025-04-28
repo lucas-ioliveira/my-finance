@@ -62,3 +62,7 @@ class InvestmentsRepository:
             user=user, active=True, status='Realizado',
             investment_date__gte=first_day, investment_date__lte=last_day
         ).aggregate(total_investments=Sum('amount'))['total_investments'] or 0
+
+    @staticmethod
+    def get_by_filters_for_the_report(filters):
+        return Investments.objects.filter(**filters)
