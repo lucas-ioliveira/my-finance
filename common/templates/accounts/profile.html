@@ -62,15 +62,15 @@
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <span>Nome<span><br>
-                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_pessoais.first_name}}</strong></span>
+                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_pessoais.first_name|default:"Não informado"}}</strong></span>
                                     </div>
                                     <div class="col-sm-4">
                                         <span>Sobrenome<span><br>
-                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_pessoais.last_name}}</strong></span>
+                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_pessoais.last_name|default:"Não informado"}}</strong></span>
                                     </div>
                                     <div class="col-sm-4">
                                         <span>E-mail<span><br>
-                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_pessoais.email}}</strong></span>
+                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_pessoais.email|default:"Não informado"}}</strong></span>
                                     </div>
                                 </div>
                             </div>
@@ -92,35 +92,35 @@
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <span>Telefone<span><br>
-                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_contato.phone|format_telefone}}</strong></span>
+                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_contato.phone|format_telefone|default:"Não informado"}}</strong></span>
                                     </div>
                                     <div class="col-sm-4">
                                         <span>CEP<span><br>
-                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_contato.cep|format_cep}}</strong></span>
+                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_contato.cep|format_cep|default:"Não informado"}}</strong></span>
                                     </div>
                                     <div class="col-sm-4">
                                         <span>Logradouro<span><br>
-                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_contato.address}}</strong></span>
+                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_contato.address|default:"Não informado"}}</strong></span>
                                     </div>
                                     <div class="col-sm-4">
                                         <span>Número<span><br>
-                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_contato.number_address}}</strong></span>
+                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_contato.number_address|default:"Não informado"}}</strong></span>
                                     </div>
                                     <div class="col-sm-4">
                                         <span>Bairro<span><br>
-                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_contato.district}}</strong></span>
+                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_contato.district|default:"Não informado"}}</strong></span>
                                     </div>
                                     <div class="col-sm-4">
                                         <span>Cidade<span><br>
-                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_contato.city}}</strong></span>
+                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_contato.city|default:"Não informado"}}</strong></span>
                                     </div>
                                     <div class="col-sm-4">
                                         <span>UF<span><br>
-                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_contato.state}}</strong></span>
+                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_contato.state|default:"Não informado"}}</strong></span>
                                     </div>
                                     <div class="col-sm-4">
                                         <span>Complemento<span><br>
-                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_contato.complement}}</strong></span>
+                                        <span class="badge badge-warning" id="statusCronicos"><strong style="color:#143c6e;">{{info_contato.complement|default:"Não informado"}}</strong></span>
                                     </div>
                                 </div>
                                 
