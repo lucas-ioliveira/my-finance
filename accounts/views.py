@@ -1,17 +1,16 @@
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.views import View
-from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib import messages
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.http import JsonResponse
 
 from accounts.forms import CustomUserCreationForm
-from accounts.models import ContactDetails
-from accounts.utils import Accounts
+from accounts.services.service import AccountService
+from accounts.repositories.repository import AccountRepository
 
 
 class CustomLoginView(LoginView):
@@ -19,7 +18,6 @@ class CustomLoginView(LoginView):
     success_url = reverse_lazy('dashboard')
 
     def form_valid(self, form):
-        # Mensagem de sucesso após login
         messages.success(self.request, "Bem-vindo!")
         return super().form_valid(form)
 
@@ -52,9 +50,8 @@ method_decorator(login_required, name='dispatch')
 
 class EnderecoView(View):
     def get(self, request):
-        cep = request.GET.get("cep")
         try:
-            cep_info = Accounts.get_cep_info(cep)
+            cep_info = AccountService.get_cep_info(request)
             return JsonResponse({'cep_info': cep_info}, status=200)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
@@ -65,33 +62,40 @@ method_decorator(login_required, name='dispatch')
 
 class ProfileView(View):
     def get(self, request):
-        user = request.user
-        info_pessoais = get_object_or_404(User, id=user.id)
-        info_contato = ContactDetails.objects.filter(user=user).first()
+        try:
+            user = request.user
+            info_pessoais = AccountRepository.get_by_id(user.id)
+            info_contato = AccountRepository.get_contact_details(user)
 
-        context = {
-            'info_pessoais': info_pessoais,
-            'info_contato': info_contato if info_contato else None
-        }
-        return render(request, 'accounts/profile.html', context)
+            context = {
+                'info_pessoais': info_pessoais,
+                'info_contato': info_contato if info_contato else None
+            }
+            return render(request, 'accounts/profile.html', context)
+        except Exception:
+            messages.error(request, "Erro ao acessar suas informações!")
+            return redirect('dashboard')
 
     def post(self, request):
-        user = request.user
         previous_page = request.META.get("HTTP_REFERER")
 
         if request.POST.get('info') == 'info_pessoais':
-            nome = request.POST.get('nome', user.first_name)
-            sobrenome = request.POST.get('sobrenome', user.last_name)
-            email = request.POST.get('email', user.email)
-
-            user.first_name = nome
-            user.last_name = sobrenome
-            user.email = email
-            user.save()
-            messages.success(request, "Suas informações pessoais foram atualizadas com sucesso!")
-            return redirect(previous_page)
+            try:
+                AccountService.update_user(request)
+                messages.success(request, "Suas informações pessoais foram atualizadas com sucesso!")
+                return redirect(previous_page)
+            except Exception as e:
+                messages.error(request, f"Erro ao atualizar suas informações pessoais: {str(e)}")
+                return redirect(previous_page)
 
         elif request.POST.get('info') == 'info_contato':
-            Accounts.atualizar_info_contato(user, request.POST)
-            messages.success(request, "Seu endereço foi atualizado com sucesso!")
-            return redirect(previous_page)
+            try:
+                AccountService.update_contact_details(request)
+                messages.success(request, "Seu endereço foi atualizado com sucesso!")
+                return redirect(previous_page)
+            except Exception as e:
+                messages.error(request, f"Erro ao atualizar seu endereço: {str(e)}")
+                return redirect(previous_page)
+
+        messages.error(request, "Erro ao atualizar suas informações!")
+        return redirect(previous_page)
