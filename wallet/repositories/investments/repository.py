@@ -64,5 +64,5 @@ class InvestmentsRepository:
         ).aggregate(total_investments=Sum('amount'))['total_investments'] or 0
 
     @staticmethod
-    def get_by_filters_for_the_report(filters):
+    def get_by_filters_for_the_report(**filters):
         return Investments.objects.filter(**filters)

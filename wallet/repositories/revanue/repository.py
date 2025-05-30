@@ -63,5 +63,5 @@ class RevenueRepository:
         ).aggregate(total_revenues=Sum('amount'))['total_revenues'] or 0
 
     @staticmethod
-    def get_by_filters_for_the_report(filters):
+    def get_by_filters_for_the_report(**filters):
         return Revenue.objects.filter(**filters)
