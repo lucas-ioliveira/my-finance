@@ -12,7 +12,7 @@ class CommonService:
     def generate_report(request):
         headers = []
         filters = {
-            'user': request.user,
+            'user': request.user.id,
             'active': True
         }
 
