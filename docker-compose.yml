@@ -4,9 +4,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    stdin_open: True
+    tty: True
     restart: on-failure
     ports:
-      - "8006:8006"
+      - "8001:8001"
     volumes:
       - .:/app
     env_file:

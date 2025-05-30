@@ -4,7 +4,7 @@ LABEL mantainer="Lucas Oliveira"
 WORKDIR /app
 COPY . /app
 
-EXPOSE 8006
+EXPOSE 8001
 
 RUN apt-get update && \
     apt-get install -y make pkg-config gcc default-libmysqlclient-dev python3-dev && \
