@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     stdin_open: True
     tty: True
-    restart: on-failure
+    restart: always
     ports:
       - "8001:8001"
     volumes:
