@@ -13,22 +13,21 @@ class DashboardService:
     def get_balance(request):
         today = datetime.now().date()
 
-        # Obtendo o primeiro e último dia do mês corretamente
         first_day = today.replace(day=1)
         last_day = today.replace(day=calendar.monthrange(today.year, today.month)[1])
 
+        date_filter = request.GET.get('date_filter')
+        if date_filter:
+            first_day = request.GET.get('initial_date')
+            last_day = request.GET.get('final_date')
+
+        expenses_by_category = ExpenseRepository.get_expenses_by_category(request.user, first_day, last_day)
         expense_total = ExpenseRepository.get_total_value(request.user, first_day, last_day)
         investments_total = InvestmentsRepository.get_total_value(request.user, first_day, last_day)
         revenues_total = RevenueRepository.get_total_value(request.user, first_day, last_day)
 
-        date_filter = request.GET.get('date_filter')
-        if date_filter:
-            initial_date = request.GET.get('initial_date')
-            final_date = request.GET.get('final_date')
-
-            expense_total = ExpenseRepository.get_total_value(request.user, initial_date, final_date)
-            investments_total = InvestmentsRepository.get_total_value(request.user, initial_date, final_date)
-            revenues_total = RevenueRepository.get_total_value(request.user, initial_date, final_date)
+        bar_labels = [item['category__name'] for item in expenses_by_category]
+        bar_data = [float(item['total']) for item in expenses_by_category]
 
         balance = revenues_total - expense_total - investments_total
 
@@ -37,6 +36,8 @@ class DashboardService:
             'expense_total': expense_total,
             'investments_total': investments_total,
             'revenues_total': revenues_total,
+            'bar_labels': bar_labels,
+            'bar_data': bar_data,
         }
 
         return data
