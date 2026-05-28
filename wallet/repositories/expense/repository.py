@@ -90,3 +90,12 @@ class ExpenseRepository:
     @staticmethod
     def get_by_filters_for_the_report(**filters):
         return Expense.objects.filter(**filters)
+    
+    @staticmethod
+    def get_expenses_by_category(user, first_day, last_day):
+        return Expense.objects.filter(
+            user=user, 
+            active=True,
+            due_date__gte=first_day, 
+            due_date__lte=last_day
+        ).values('category__name').annotate(total=Sum('amount')).order_by('-total')
