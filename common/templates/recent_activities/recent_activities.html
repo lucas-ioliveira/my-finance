@@ -1,0 +1,156 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block title %}MyFinance | Atividades Recentes{% endblock title %}
+
+{% block content %}
+
+{% include "partials/topnav/_topnav.html" %}
+<div id="layoutSidenav">
+    {% include "partials/sidenav/_sidenav.html" %}
+    <div id="layoutSidenav_content">
+        <main class="d-flex flex-column">
+            <div class="container-fluid px-4 d-flex flex-column flex-grow-1">
+            
+                <h1 class="mt-4">Atividades Recentes</h1>
+                <hr class="mt-0 mb-4">
+
+                {% include "partials/messages/messages.html" %}
+
+                <div class="row flex-grow-1 mt-5">
+                    <div class="col-12 d-flex flex-column">
+                        {% if recent_creates %}
+                            <div class="card flex-grow-1 shadow-sm">
+                                <div class="card-header">
+                                    <i class="fa-solid fa-check"></i>
+                                    Criações recentes
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive h-100">
+                                        <table class="table table-striped mt-3">
+                                            <thead>
+                                                <tr>
+                                                    <th>Método</th>
+                                                    <th>Ação</th>
+                                                    <th>Descrição</th>
+                                                    <th>Data</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for item in recent_creates %}
+                                                    <tr>
+                                                        <td>
+                                                            {% if item.event_type == 1 %}
+                                                                <span class="badge rounded-pill bg-success">Criação</span>
+                                                            {% elif item.event_type == 2 %}
+                                                                <span class="badge rounded-pill bg-warning">Atualização</span>
+                                                            {% elif item.event_type == 3 %}
+                                                                <span class="badge rounded-pill bg-danger">Exclusão</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{{ item.content_type }}</td>
+                                                        <td>{{ item.object_repr }}</td>
+                                                        <td>{{ item.datetime|date:"d/m/Y H:i" }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        {% if recent_updates %}
+                            <div class="card flex-grow-1 shadow-sm mt-3">
+                                <div class="card-header">
+                                    <i class="fa-solid fa-arrow-rotate-right"></i>
+                                    Atualizações recentes
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive h-100">
+                                        <table class="table table-striped mt-3">
+                                            <thead>
+                                                <tr>
+                                                    <th>Método</th>
+                                                    <th>Ação</th>
+                                                    <th>Descrição</th>
+                                                    <th>Data</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for item in recent_updates %}
+                                                    <tr>
+                                                        <td>
+                                                            {% if item.event_type == 1 %}
+                                                                <span class="badge rounded-pill bg-success">Criação</span>
+                                                            {% elif item.event_type == 2 %}
+                                                                <span class="badge rounded-pill bg-warning">Atualização</span>
+                                                            {% elif item.event_type == 3 %}
+                                                                <span class="badge rounded-pill bg-danger">Exclusão</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{{ item.content_type }}</td>
+                                                        <td>{{ item.object_repr }}</td>
+                                                        <td>{{ item.datetime|date:"d/m/Y H:i" }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if recent_deletes %}
+                            <div class="card flex-grow-1 shadow-sm mt-3">
+                                <div class="card-header">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                    Exclusões recentes
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive h-100">
+                                        <table class="table table-striped mt-3">
+                                            <thead>
+                                                <tr>
+                                                    <th>Método</th>
+                                                    <th>Ação</th>
+                                                    <th>Descrição</th>
+                                                    <th>Data</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for item in recent_deletes %}
+                                                    <tr>
+                                                        <td>
+                                                            {% if item.event_type == 1 %}
+                                                                <span class="badge rounded-pill bg-success">Criação</span>
+                                                            {% elif item.event_type == 2 %}
+                                                                <span class="badge rounded-pill bg-warning">Atualização</span>
+                                                            {% elif item.event_type == 3 %}
+                                                                <span class="badge rounded-pill bg-danger">Exclusão</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{{ item.content_type }}</td>
+                                                        <td>{{ item.object_repr }}</td>
+                                                        <td>{{ item.datetime|date:"d/m/Y H:i" }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        {%endif%}
+
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        {% include "partials/footer/_footer.html" %}
+    </div>
+</div>
+
+{% endblock %}
