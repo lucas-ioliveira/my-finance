@@ -103,37 +103,7 @@
                                 Taxas de câmbio
                             </div>
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped mt-3">
-                                        <thead>
-                                            <tr>
-                                                <th>Moeda</th>
-                                                <th>Tipo</th>
-                                                <th>Valor Atual</th>
-                                                <th>Data</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for item in exchange_rates %}
-                                                <tr>
-                                                    <td>
-                                                        {% if  item.code == 'USD' %}
-                                                            <span class="badge rounded-pill bg-info">USD</span>
-                                                        {% elif item.code == 'EUR' %}
-                                                            <span class="badge rounded-pill bg-info">EUR</span>
-                                                        {% elif item.code == 'BTC' %}
-                                                            <span class="badge rounded-pill bg-info">BTC</span>
-                                                        {% endif %}
-                                                        
-                                                    </td>
-                                                    <td>{{ item.name }}</td>
-                                                    <td>R$ {{ item.high|floatformat:2|intcomma }}</td>
-                                                    <td>{% now 'd/m/Y' %}</td>
-                                                </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -145,36 +115,7 @@
                                 Atividades recentes
                             </div>
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped mt-3">
-                                        <thead>
-                                            <tr>
-                                                <th>Método</th>
-                                                <th>Ação</th>
-                                                <th>Descrição</th>
-                                                <th>Data</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for item in recent_transactions %}
-                                                <tr>
-                                                    <td>
-                                                        {% if  item.event_type == 1 %}
-                                                            <span class="badge rounded-pill bg-success">Criação</span>
-                                                        {% elif item.event_type == 2 %}
-                                                            <span class="badge rounded-pill bg-warning">Atualização</span>
-                                                        {% elif item.event_type == 3 %}
-                                                            <span class="badge rounded-pill bg-danger">Exclusão</span>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td>{{ item.content_type }}</td>
-                                                    <td>{{ item.object_repr }}</td>
-                                                    <td>{{ item.datetime|date:"d/m/Y H:i" }}</td>
-                                                </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
