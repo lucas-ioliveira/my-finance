@@ -1,10 +1,13 @@
 #!/bin/bash
 
+set -e
+
 echo "Aguardando o banco de dados..."
-sleep 5  
+sleep 5
 
 echo "Aplicando migrações..."
-python manage.py migrate
+python manage.py migrate --noinput
 
-echo "Iniciando o servidor Django..."
-python manage.py runserver 0.0.0.0:8001
+echo "Iniciando o processo principal..."
+
+exec "$@"
