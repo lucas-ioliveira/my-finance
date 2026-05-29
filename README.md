@@ -47,19 +47,19 @@ docker ps -a
 
 **Home**
 
-![Home](docs/img/home.png)
+![Home](docs/img/new-home.png)
 
 <br>
 
 **Login**
 
-![Home](docs/img/login.png)
+![Home](docs/img/new-login.png)
 
 <br>
 
 **Cadastre-se**
 
-![Home](docs/img/cadastro.png)
+![Home](docs/img/new-register.png)
 
 <br>
 
