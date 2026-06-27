@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
+
 from common.models import Base
+from common.utils.generics import Generics
 
 
 class Category(Base):
@@ -59,7 +61,7 @@ class Expense(Base):
     payment_date = models.DateField(verbose_name='Data de Pagamento', null=True, blank=True)
     due_date = models.DateField(verbose_name='Data de Vencimento')
     payment_method = models.CharField(max_length=255, verbose_name='Forma de Pagamento')
-    receipt = models.FileField(upload_to='receipts/expense/', blank=True, null=True, verbose_name='Comprovante')
+    receipt = models.FileField(upload_to=Generics.get_expense_receipt_path_advanced, blank=True, null=True, verbose_name='Comprovante')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pendente', verbose_name='Status')
 
     class Meta:
