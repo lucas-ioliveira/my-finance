@@ -126,7 +126,9 @@
 
                                                     <td style="text-align: center;">
                                                         {% if item.receipt %}
-                                                            <a href="{{ item.receipt.url }}" target="_blank"><i class="fa-solid fa-eye"></i></a>
+                                                            <a href="{% url 'expense_receipt' item.id %}" target="_blank">
+                                                                <i class="fa-solid fa-eye"></i>
+                                                            </a>
                                                         {% else %}
                                                             Não informado
                                                         {% endif %}

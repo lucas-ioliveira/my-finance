@@ -2,7 +2,7 @@ from django.urls import path
 from wallet.views import (
     CategoryView, CategoryDeleteView, CategoryEditView,
     RevenueView, RevenueEditView, RevenueDeleteView, RevenueCloneView,
-    ExpenseView, ExpenseDeleteView, ExpenseEditView, ExpenseCloneView,
+    ExpenseView, ExpenseDeleteView, ExpenseEditView, ExpenseCloneView, ExpenseReceiptView,
     InvestmentsView, InvestmentsEditView, InvestmentsDeleteView, InvestmentsCloneView
 )
 
@@ -21,6 +21,7 @@ urlpatterns = [
     path('expense/delete/<int:expense_id>/', ExpenseDeleteView.as_view(), name='expense-delete'),
     path('expense/edit/<int:expense_id>/', ExpenseEditView.as_view(), name='expense-edit'),
     path('expense/clone/<int:expense_id>/', ExpenseCloneView.as_view(), name='expense-clone'),
+    path("expense/receipt/<int:expense_id>/", ExpenseReceiptView.as_view(), name="expense_receipt"),
 
     path('investments/', InvestmentsView.as_view(), name='investments'),
     path('investments/delete/<int:investments_id>/', InvestmentsDeleteView.as_view(), name='investments-delete'),

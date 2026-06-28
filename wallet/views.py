@@ -189,6 +189,17 @@ class ExpenseCloneView(View):
 
 
 @method_decorator(login_required, name='dispatch')
+class ExpenseReceiptView(View):
+    def get(self, request, expense_id):
+        try:
+            return ExpenseService.download_receipt(request, expense_id)
+
+        except Exception:
+            messages.error(request, "Erro ao carregar arquivo!")
+            return redirect('expense')
+
+
+@method_decorator(login_required, name='dispatch')
 class InvestmentsView(View):
     def get(self, request):
         try:

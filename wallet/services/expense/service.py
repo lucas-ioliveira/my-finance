@@ -1,4 +1,5 @@
 from django.core.paginator import Paginator
+from django.http import FileResponse, HttpResponse
 
 from datetime import datetime
 
@@ -88,3 +89,18 @@ class ExpenseService:
     def delete(expense_id):
         active = False
         ExpenseRepository.delete(expense_id, active)
+
+    @staticmethod
+    def download_receipt(request, expense_id):
+        expense = ExpenseRepository.get_by_id(expense_id, request.user)
+
+        if not expense.receipt:
+            return
+
+        file = expense.receipt.open("rb")
+
+        return FileResponse(
+            file,
+            as_attachment=False,
+            filename=expense.receipt.name.split("/")[-1]
+        )

@@ -99,3 +99,7 @@ class ExpenseRepository:
             due_date__gte=first_day, 
             due_date__lte=last_day
         ).values('category__name').annotate(total=Sum('amount')).order_by('-total')
+    
+    @staticmethod
+    def get_by_id(expense_id, user):
+        return get_object_or_404(Expense, id=expense_id, user=user)
