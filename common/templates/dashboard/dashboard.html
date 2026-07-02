@@ -79,7 +79,7 @@
                     <div class="col-xl-3 col-md-6 col-sm-12">
                         <div class="card bg-info text-white mb-4">
                             <div class="card-body">Saldo
-                                {% if investments_total %}
+                                {% if balance %}
                                     <h3 class="card-title">R$ {{ balance|floatformat:2|intcomma }}</h3>
                                 {% else %}
                                     <h3 class="card-title">R$ 0,00</h3>
